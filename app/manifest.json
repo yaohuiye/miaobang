@@ -2,8 +2,8 @@
     "name" : "妙帮",
     "appid" : "",
     "description" : "",
-    "versionName" : "1.0.1",
-    "versionCode" : "101",
+    "versionName" : "1.0.2",
+    "versionCode" : "102",
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -31,7 +31,15 @@
                 "dSYMs" : false
             },
             /* SDK配置 */
-            "sdkConfigs" : {}
+            "sdkConfigs" : {},
+            "icons": {
+                "android": {
+                    "hdpi": "static/app-icon/hdpi.png",
+                    "xhdpi": "static/app-icon/xhdpi.png",
+                    "xxhdpi": "static/app-icon/xxhdpi.png",
+                    "xxxhdpi": "static/app-icon/xxxhdpi.png"
+                }
+            }
         }
     },
     /* 快应用特有相关 */
