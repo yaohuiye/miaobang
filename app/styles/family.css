@@ -1,0 +1,21 @@
+.family-page { min-height: 100vh; max-width: 520px; margin: 0 auto; box-sizing: border-box; padding: 20px 18px 36px; background: #f4f8ff; color: #19365c; }
+.family-page .eyebrow { display: block; color: #526b86; font-size: 12px; letter-spacing: 1px; margin-bottom: 10px; }
+.family-page .title { display: block; font-size: 28px; font-weight: 750; letter-spacing: -.5px; line-height: 1.4; }
+.family-page .intro { display: block; font-size: 15px; color: #526b86; line-height: 1.8; margin: 12px 0 22px; }
+.family-page .card { background: #fff; border: 1px solid #deE8f6; border-bottom-width: 3px; border-radius: 20px; padding: 19px; margin-bottom: 18px; }
+.family-page .heading { display: block; font-size: 16px; font-weight: 650; margin-bottom: 14px; }
+.family-page .muted { display: block; color: #526b86; font-size: 14px; line-height: 1.8; }
+.family-page button { border-radius: 13px; font-size: 14px; }
+.family-page button::after { border: none; }
+.family-page button[disabled] { opacity: .45; }
+.family-page .primary { background: #2467b5; color: #fff; border-bottom: 4px solid #2a6bbb; line-height: 46px; font-weight: 600; }
+.family-page .secondary { background: #e7f0fc; color: #326599; line-height: 44px; }
+.family-page .link { background: transparent; color: #426889; font-size: 12px; line-height: 44px; }
+.family-page .error { display: block; border: 1px solid #f1d5b5; background: #fff0dc; color: #975f32; padding: 14px; margin: 12px 0; border-radius: 13px; font-size: 14px; line-height: 1.8; }
+.family-page .pill { display: inline-block; padding: 5px 9px; font-size: 12px; background: #eaf2fe; color: #386695; border-radius: 8px; }
+.family-page .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.family-page .actions { display: flex; gap: 12px; margin-top: 16px; }
+.family-page .actions button { flex: 1; margin: 0; }
+.family-page .input { height: 48px; padding: 0 14px; border: 1px solid #d5e2f3; background: #f8fbff; border-radius: 12px; font-size: 14px; color: #234569; box-sizing: border-box; }
+
+.family-page button { min-height:44px; white-space:normal; }.family-page .primary { min-height:50px; }.family-page input,.family-page textarea { font-family:inherit; }.family-page .section-heading { line-height:1.5; }

@@ -1,0 +1,16 @@
+{
+  "id": "miaobang-reminder",
+  "displayName": "妙帮本地提醒",
+  "version": "0.1.0",
+  "description": "Android 离线计时与本地提醒验证",
+  "engines": {
+    "HBuilderX": "^5.26.0"
+  },
+  "dcloudext": {
+    "type": "uts"
+  },
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": []
+  }
+}

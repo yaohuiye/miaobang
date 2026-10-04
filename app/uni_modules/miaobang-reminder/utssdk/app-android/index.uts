@@ -1,0 +1,18 @@
+import { UTSAndroid } from 'io.dcloud.uts'
+import { ReminderNative } from 'io.miaobang.reminder'
+
+export function getReminderStatus(): string {
+  return ReminderNative.snapshot(UTSAndroid.getAppContext()!)
+}
+
+export function scheduleReminder(seconds: number, ownerId: string): string {
+  return ReminderNative.schedule(UTSAndroid.getAppContext()!, seconds, ownerId)
+}
+
+export function cancelReminder(ownerId: string): string {
+  return ReminderNative.cancelOwned(UTSAndroid.getAppContext()!, ownerId)
+}
+
+export function requestReminderPermission(kind: string): void {
+  ReminderNative.requestPermission(UTSAndroid.getUniActivity()!, kind)
+}
