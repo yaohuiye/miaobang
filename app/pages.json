@@ -7,6 +7,10 @@
         { "path": "pages/games/safety", "style": { "navigationBarTitleText": "安全小侦探", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/growth/index", "style": { "navigationBarTitleText": "成长小花园", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/games/english", "style": { "navigationBarTitleText": "英语游乐场", "navigationBarBackgroundColor": "#f4f8ff" } },
+        { "path": "pages/games/minesweeper", "style": { "navigationBarTitleText": "扫雷", "navigationBarBackgroundColor": "#f4f8ff" } },
+        { "path": "pages/games/tetris", "style": { "navigationBarTitleText": "俄罗斯方块", "navigationBarBackgroundColor": "#f4f8ff" } },
+        { "path": "pages/games/match", "style": { "navigationBarTitleText": "消消乐", "navigationBarBackgroundColor": "#f4f8ff" } },
+        { "path": "pages/games/snake", "style": { "navigationBarTitleText": "贪吃蛇", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/history/index", "style": { "navigationBarTitleText": "一起做过的小事", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/setup/check", "style": { "navigationBarTitleText": "妙帮 · 安装验证" } },
         { "path": "pages/puzzle/index", "style": { "navigationBarTitleText": "一起解谜", "navigationBarBackgroundColor": "#f4f8ff" } },
@@ -20,6 +24,20 @@
 			"path": "pages/learning/arithmetic",
 			"style": {
 				"navigationBarTitleText": "口算题生成器"
+			}
+		},
+		{
+			"path": "pages/learning/oral-daily",
+			"style": {
+				"navigationBarTitleText": "每日口算打卡",
+				"navigationBarBackgroundColor": "#f4f8ff"
+			}
+		},
+		{
+			"path": "pages/learning/essays",
+			"style": {
+				"navigationBarTitleText": "作文范例",
+				"navigationBarBackgroundColor": "#f4f8ff"
 			}
 		},
 		{
