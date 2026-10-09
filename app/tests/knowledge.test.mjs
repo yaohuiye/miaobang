@@ -5,11 +5,11 @@ import vm from 'node:vm'
 import { entries, SUBJECTS, SOURCES } from '../data/knowledge/index.mjs'
 import { emptyProgress, readProgress, setOnShelf, searchEntries, makePractice, shuffle, judgeAnswer, createKnowledgeStore, KNOWLEDGE_KEY } from '../knowledge/model.mjs'
 
-test('all 550 original cards have usable content, stable unique IDs and unambiguous answer choices', () => {
-  assert.equal(entries.length, 550)
+test('all 723 cards have usable content, stable unique IDs and unambiguous answer choices', () => {
+  assert.equal(entries.length, 723)
   assert.equal(new Set(entries.map(e => e.id)).size, entries.length)
   assert.equal(new Set(entries.map(e => e.title)).size, entries.length)
-  assert.deepEqual(SUBJECTS.map(s => entries.filter(e => e.subject === s.id).length), [300, 100, 80, 50, 20])
+  assert.deepEqual(SUBJECTS.map(s => entries.filter(e => e.subject === s.id).length), [473, 100, 80, 50, 20])
   for (const e of entries) {
     for (const key of ['title','topic','summary','explanation','example','tip','talk','level']) assert.ok(typeof e[key] === 'string' && e[key].trim(), `${e.id}: ${key}`)
     assert.ok(e.sources.length && e.sources.every(id => SOURCES[id]), e.id)
@@ -28,7 +28,7 @@ test('Chinese, case-insensitive English and tone-free pinyin queries find knowle
   assert.ok(searchEntries({query:'zhuānxīnzhìzhì'}).some(e => e.title === '专心致志'))
   assert.ok(searchEntries({query:'海水'}).some(e => e.subject === 'science'))
   assert.equal(searchEntries({query:'不存在的外星密码xyz'}).length, 0)
-  assert.equal(searchEntries({query:'   '}).length, 550)
+  assert.equal(searchEntries({query:'   '}).length, 723)
 })
 test('subject, topic, search and shelf filters intersect rather than leak other subjects', () => {
   const progress = setOnShelf(emptyProgress(), 'favorites', 'en-library', true)

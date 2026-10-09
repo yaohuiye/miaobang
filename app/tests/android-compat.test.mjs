@@ -13,7 +13,7 @@ test('dictionary startup, spelling, routes and saved focus work without newer An
     const { parseMap, runRoute } = await import('./game/route.mjs')
     const { readProgress } = await import('./game/progress.mjs')
     const { emptyState, begin, finish, readState } = await import('./focus/model.mjs')
-    assert.equal(entries.length, 550)
+    assert.equal(entries.length, 723)
     assert.ok(searchEntries({ query: 'library' }).some(entry => entry.id === 'en-library'))
     const word = entries.find(entry => entry.subject === 'english' && entry.title.includes(' ') && !entry.id.startsWith('en-pattern-'))
     assert.equal(word.id, 'en-' + word.title.replace(/ /g, '-'))

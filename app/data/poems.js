@@ -4666,7 +4666,8 @@ export default [
               "bù",
               "yì",
               "jiāng",
-              "nán"
+              "nán",
+              ""
             ]
           }
         ],
@@ -13725,6 +13726,388 @@ export default [
         ],
         "title": "清平乐·春归何处",
         "id": "d8de9bc3-8255-11ea-9a8c-6f36b7b59df7"
+      }
+    ]
+  ],
+  [
+    [
+      {
+        "dynasty": "先秦",
+        "author": "《山海经·北山经》",
+        "lines": [
+          { "characters": ["炎", "帝", "之", "少", "女"], "pinyins": ["yán", "dì", "zhī", "shào", "nǚ"] },
+          { "characters": ["名", "曰", "女", "娃"], "pinyins": ["míng", "yuē", "nǚ", "wá"] },
+          { "characters": ["女", "娃", "游", "于", "东", "海"], "pinyins": ["nǚ", "wá", "yóu", "yú", "dōng", "hǎi"] },
+          { "characters": ["溺", "而", "不", "返"], "pinyins": ["nì", "ér", "bù", "fǎn"] },
+          { "characters": ["故", "为", "精", "卫"], "pinyins": ["gù", "wéi", "jīng", "wèi"] },
+          { "characters": ["常", "衔", "西", "山", "之", "木", "石"], "pinyins": ["cháng", "xián", "xī", "shān", "zhī", "mù", "shí"] },
+          { "characters": ["以", "堙", "于", "东", "海"], "pinyins": ["yǐ", "yīn", "yú", "dōng", "hǎi"] }
+        ],
+        "keywords": ["四年级上册", "文言文", "神话", "必背课文"],
+        "annotations": [
+          {
+            "translation": [
+              "炎帝的小女儿，名叫女娃。",
+              "女娃到东海游玩，溺水没有回来，就化作了精卫鸟。",
+              "它常常衔来西山的树枝和石块，把它们填进东海。"
+            ],
+            "annotation": [
+              "少女：小女儿。",
+              "曰：叫做，称为。",
+              "溺：溺水，淹没在水里。",
+              "故：因此，所以。",
+              "堙（yīn）：填塞，填埋。"
+            ]
+          }
+        ],
+        "title": "精卫填海",
+        "id": "mb-jingwei-tianhai"
+      },
+      {
+        "dynasty": "南北朝",
+        "author": "《世说新语·雅量》",
+        "lines": [
+          { "characters": ["王", "戎", "七", "岁"], "pinyins": ["wáng", "róng", "qī", "suì"] },
+          { "characters": ["尝", "与", "诸", "小", "儿", "游"], "pinyins": ["cháng", "yǔ", "zhū", "xiǎo", "ér", "yóu"] },
+          { "characters": ["看", "道", "边", "李", "树", "多", "子", "折", "枝"], "pinyins": ["kàn", "dào", "biān", "lǐ", "shù", "duō", "zǐ", "zhé", "zhī"] },
+          { "characters": ["诸", "儿", "竞", "走", "取", "之"], "pinyins": ["zhū", "ér", "jìng", "zǒu", "qǔ", "zhī"] },
+          { "characters": ["唯", "戎", "不", "动"], "pinyins": ["wéi", "róng", "bú", "dòng"] },
+          { "characters": ["人", "问", "之"], "pinyins": ["rén", "wèn", "zhī"] },
+          { "characters": ["答", "曰"], "pinyins": ["dá", "yuē"] },
+          { "characters": ["树", "在", "道", "边", "而", "多", "子"], "pinyins": ["shù", "zài", "dào", "biān", "ér", "duō", "zǐ"] },
+          { "characters": ["此", "必", "苦", "李"], "pinyins": ["cǐ", "bì", "kǔ", "lǐ"] },
+          { "characters": ["取", "之", "信", "然"], "pinyins": ["qǔ", "zhī", "xìn", "rán"] }
+        ],
+        "keywords": ["四年级上册", "文言文", "历史人物故事", "必背课文"],
+        "annotations": [
+          {
+            "translation": [
+              "王戎七岁的时候，曾经和许多小孩子一起玩耍。",
+              "他们看见路边的李树上结满果子，把树枝都压弯了，小孩子们争着跑过去摘，只有王戎不动。",
+              "有人问他为什么，他回答说：树长在路边却还有这么多果子，这一定是苦李子。",
+              "摘来一尝，果然是这样。"
+            ],
+            "annotation": [
+              "王戎：西晋名士，“竹林七贤”之一。",
+              "尝：曾经。",
+              "竞走：争着跑过去。",
+              "唯：只有。",
+              "信然：确实这样。"
+            ]
+          }
+        ],
+        "title": "王戎不取道旁李",
+        "id": "mb-wangrong-buqu-daopangli"
+      },
+      {
+        "dynasty": "唐",
+        "author": "《晋书·车胤传》",
+        "lines": [
+          { "characters": ["胤", "恭", "勤", "不", "倦"], "pinyins": ["yìn", "gōng", "qín", "bú", "juàn"] },
+          { "characters": ["博", "学", "多", "通"], "pinyins": ["bó", "xué", "duō", "tōng"] },
+          { "characters": ["家", "贫", "不", "常", "得", "油"], "pinyins": ["jiā", "pín", "bù", "cháng", "dé", "yóu"] },
+          { "characters": ["夏", "月", "则", "练", "囊", "盛", "数", "十", "萤", "火"], "pinyins": ["xià", "yuè", "zé", "liàn", "náng", "chéng", "shù", "shí", "yíng", "huǒ"] },
+          { "characters": ["以", "照", "书"], "pinyins": ["yǐ", "zhào", "shū"] },
+          { "characters": ["以", "夜", "继", "日", "焉"], "pinyins": ["yǐ", "yè", "jì", "rì", "yān"] }
+        ],
+        "keywords": ["四年级下册", "文言文", "勤奋好学", "必背课文"],
+        "annotations": [
+          {
+            "translation": [
+              "车胤谦恭勤勉，学习从不知疲倦；他知识广博，学问精通。",
+              "他家境贫寒，不能常常得到灯油，夏天的夜晚就用白色薄绢做成口袋，装几十只萤火虫来照着书本，夜以继日地学习。"
+            ],
+            "annotation": [
+              "胤：车胤，晋朝人，自幼好学，官至吏部尚书。",
+              "恭勤：谦逊勤勉。通：通晓，明白。",
+              "练囊：白色薄绢做的口袋。练，白绢。",
+              "盛（chéng）：装，把东西放进容器里。",
+              "以夜继日：夜晚接着白天学习，也就是“夜以继日”。焉：句末语气词。"
+            ]
+          }
+        ],
+        "title": "囊萤夜读",
+        "id": "mb-nangying-yedu"
+      },
+      {
+        "dynasty": "宋",
+        "author": "《方舆胜览》",
+        "lines": [
+          { "characters": ["磨", "针", "溪"], "pinyins": ["mó", "zhēn", "xī"] },
+          { "characters": ["在", "象", "耳", "山", "下"], "pinyins": ["zài", "xiàng", "ěr", "shān", "xià"] },
+          { "characters": ["世", "传", "李", "太", "白", "读", "书", "山", "中"], "pinyins": ["shì", "chuán", "lǐ", "tài", "bái", "dú", "shū", "shān", "zhōng"] },
+          { "characters": ["未", "成"], "pinyins": ["wèi", "chéng"] },
+          { "characters": ["弃", "去"], "pinyins": ["qì", "qù"] },
+          { "characters": ["过", "是", "溪"], "pinyins": ["guò", "shì", "xī"] },
+          { "characters": ["逢", "老", "媪", "方", "磨", "铁", "杵"], "pinyins": ["féng", "lǎo", "ǎo", "fāng", "mó", "tiě", "chǔ"] },
+          { "characters": ["问", "之"], "pinyins": ["wèn", "zhī"] },
+          { "characters": ["曰"], "pinyins": ["yuē"] },
+          { "characters": ["欲", "作", "针"], "pinyins": ["yù", "zuò", "zhēn"] },
+          { "characters": ["太", "白", "感", "其", "意"], "pinyins": ["tài", "bái", "gǎn", "qí", "yì"] },
+          { "characters": ["还", "卒", "业"], "pinyins": ["huán", "zú", "yè"] }
+        ],
+        "keywords": ["四年级下册", "文言文", "历史人物故事", "必背课文"],
+        "annotations": [
+          {
+            "translation": [
+              "磨针溪在眉州象耳山下。",
+              "世间相传李白在山中读书的时候，还没有读完，就放弃离去了。",
+              "他路过这条小溪，遇见一位老妇人正在磨铁棒。",
+              "问她磨铁棒做什么，她说：“想做针。”",
+              "李白被她的意志感动，就回到山中完成了学业。"
+            ],
+            "annotation": [
+              "世传：世世代代相传。成：完成。",
+              "是：这，此。媪（ǎo）：老年妇女。方：正在。",
+              "铁杵：铁棒。杵，舂米或捶衣服用的棒子。",
+              "欲：想要。感其意：被她的意志感动。",
+              "还（huán）：回去。卒业：完成学业。卒，完成。"
+            ]
+          }
+        ],
+        "title": "铁杵成针",
+        "id": "mb-tiechu-chengzhen"
+      }
+    ],
+    [
+      {
+        "dynasty": "唐",
+        "author": "王维",
+        "lines": [
+          { "characters": ["独", "坐", "幽", "篁", "里"], "pinyins": ["dú", "zuò", "yōu", "huáng", "lǐ"] },
+          { "characters": ["弹", "琴", "复", "长", "啸"], "pinyins": ["tán", "qín", "fù", "cháng", "xiào"] },
+          { "characters": ["深", "林", "人", "不", "知"], "pinyins": ["shēn", "lín", "rén", "bù", "zhī"] },
+          { "characters": ["明", "月", "来", "相", "照"], "pinyins": ["míng", "yuè", "lái", "xiāng", "zhào"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "山水", "闲适"],
+        "annotations": [
+          {
+            "translation": [
+              "我独自坐在幽深的竹林里，一边弹琴一边发出长长清脆的啸声。",
+              "竹林幽深，没有人知道我在这里，只有一轮明月来把我照耀、陪伴。"
+            ],
+            "annotation": [
+              "幽篁：幽深的竹林。",
+              "啸：撮口发出长而清脆的声音。",
+              "相照：照耀着我。"
+            ]
+          }
+        ],
+        "title": "竹里馆",
+        "id": "mb-zhuliguan"
+      },
+      {
+        "dynasty": "唐",
+        "author": "王维",
+        "lines": [
+          { "characters": ["红", "豆", "生", "南", "国"], "pinyins": ["hóng", "dòu", "shēng", "nán", "guó"] },
+          { "characters": ["春", "来", "发", "几", "枝"], "pinyins": ["chūn", "lái", "fā", "jǐ", "zhī"] },
+          { "characters": ["愿", "君", "多", "采", "撷"], "pinyins": ["yuàn", "jūn", "duō", "cǎi", "xié"] },
+          { "characters": ["此", "物", "最", "相", "思"], "pinyins": ["cǐ", "wù", "zuì", "xiāng", "sī"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "思念", "咏物"],
+        "annotations": [
+          {
+            "translation": [
+              "红豆生长在南方，春天到来时又生出多少新枝。",
+              "希望你多多采摘，因为它最能寄托思念之情。"
+            ],
+            "annotation": [
+              "南国：南方。",
+              "采撷：采摘。",
+              "相思：想念。"
+            ]
+          }
+        ],
+        "title": "相思",
+        "id": "mb-xiangsi"
+      },
+      {
+        "dynasty": "唐",
+        "author": "王维",
+        "lines": [
+          { "characters": ["君", "自", "故", "乡", "来"], "pinyins": ["jūn", "zì", "gù", "xiāng", "lái"] },
+          { "characters": ["应", "知", "故", "乡", "事"], "pinyins": ["yīng", "zhī", "gù", "xiāng", "shì"] },
+          { "characters": ["来", "日", "绮", "窗", "前"], "pinyins": ["lái", "rì", "qǐ", "chuāng", "qián"] },
+          { "characters": ["寒", "梅", "著", "花", "未"], "pinyins": ["hán", "méi", "zhuó", "huā", "wèi"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "思乡", "咏物"],
+        "annotations": [
+          {
+            "translation": [
+              "你是从故乡来的，应该知道故乡的事情。",
+              "你来的时候，雕花的窗前那株寒梅开花了没有？"
+            ],
+            "annotation": [
+              "来日：动身前来的那天。",
+              "绮窗：雕饰精美的窗子。",
+              "著花未：开花了没有。著（zhuó），开花。"
+            ]
+          }
+        ],
+        "title": "杂诗（其二）",
+        "id": "mb-zashi-qier"
+      },
+      {
+        "dynasty": "唐",
+        "author": "王维",
+        "lines": [
+          { "characters": ["山", "中", "相", "送", "罢"], "pinyins": ["shān", "zhōng", "xiāng", "sòng", "bà"] },
+          { "characters": ["日", "暮", "掩", "柴", "扉"], "pinyins": ["rì", "mù", "yǎn", "chái", "fēi"] },
+          { "characters": ["春", "草", "明", "年", "绿"], "pinyins": ["chūn", "cǎo", "míng", "nián", "lǜ"] },
+          { "characters": ["王", "孙", "归", "不", "归"], "pinyins": ["wáng", "sūn", "guī", "bù", "guī"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "送别", "思念"],
+        "annotations": [
+          {
+            "translation": [
+              "在山中把你送走之后，夕阳落下时我掩上了柴门。",
+              "等到明年春天草再绿的时候，你回不回来呢？"
+            ],
+            "annotation": [
+              "掩：关闭。",
+              "柴扉：柴门。",
+              "王孙：这里指诗人想念的朋友。"
+            ]
+          }
+        ],
+        "title": "山中送别",
+        "id": "mb-shanzhong-songbie"
+      },
+      {
+        "dynasty": "唐",
+        "author": "李白",
+        "lines": [
+          { "characters": ["白", "发", "三", "千", "丈"], "pinyins": ["bái", "fà", "sān", "qiān", "zhàng"] },
+          { "characters": ["缘", "愁", "似", "个", "长"], "pinyins": ["yuán", "chóu", "sì", "gè", "cháng"] },
+          { "characters": ["不", "知", "明", "镜", "里"], "pinyins": ["bù", "zhī", "míng", "jìng", "lǐ"] },
+          { "characters": ["何", "处", "得", "秋", "霜"], "pinyins": ["hé", "chù", "dé", "qiū", "shuāng"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "夸张", "抒怀"],
+        "annotations": [
+          {
+            "translation": [
+              "白发长达三千丈，是因为愁绪才像这样长。",
+              "不知道明亮的镜子里，从哪儿得来这满头秋霜。"
+            ],
+            "annotation": [
+              "缘：因为。",
+              "似个：像这样。",
+              "秋霜：这里用来形容白发。"
+            ]
+          }
+        ],
+        "title": "秋浦歌（其十五）",
+        "id": "mb-qiupuge-qishiwu"
+      },
+      {
+        "dynasty": "三国魏",
+        "author": "曹植",
+        "lines": [
+          { "characters": ["煮", "豆", "燃", "豆", "萁"], "pinyins": ["zhǔ", "dòu", "rán", "dòu", "qí"] },
+          { "characters": ["豆", "在", "釜", "中", "泣"], "pinyins": ["dòu", "zài", "fǔ", "zhōng", "qì"] },
+          { "characters": ["本", "是", "同", "根", "生"], "pinyins": ["běn", "shì", "tóng", "gēn", "shēng"] },
+          { "characters": ["相", "煎", "何", "太", "急"], "pinyins": ["xiāng", "jiān", "hé", "tài", "jí"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "七步成诗", "讽喻"],
+        "annotations": [
+          {
+            "translation": [
+              "锅里煮着豆子，豆秸在锅下燃烧，豆子在锅中哭泣。",
+              "本来是同一条根上生长出来的，为什么要这样急迫地煎熬我呢？"
+            ],
+            "annotation": [
+              "萁：豆子脱粒后剩下的茎，豆秸。",
+              "釜：古代的一种锅。",
+              "煎：煎熬，这里指迫害。"
+            ]
+          }
+        ],
+        "title": "七步诗",
+        "id": "mb-qibushi"
+      },
+      {
+        "dynasty": "唐",
+        "author": "刘长卿",
+        "lines": [
+          { "characters": ["日", "暮", "苍", "山", "远"], "pinyins": ["rì", "mù", "cāng", "shān", "yuǎn"] },
+          { "characters": ["天", "寒", "白", "屋", "贫"], "pinyins": ["tiān", "hán", "bái", "wū", "pín"] },
+          { "characters": ["柴", "门", "闻", "犬", "吠"], "pinyins": ["chái", "mén", "wén", "quǎn", "fèi"] },
+          { "characters": ["风", "雪", "夜", "归", "人"], "pinyins": ["fēng", "xuě", "yè", "guī", "rén"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "冬夜", "借宿"],
+        "annotations": [
+          {
+            "translation": [
+              "傍晚时分，暮色苍茫，远山显得更加遥远。",
+              "天气寒冷，简陋的茅屋显得更加清贫。",
+              "忽然听见柴门外狗叫声不断，原来是有人顶着风雪夜里归来。"
+            ],
+            "annotation": [
+              "白屋：茅草覆盖的简陋房屋。",
+              "犬吠：狗叫。"
+            ]
+          }
+        ],
+        "title": "逢雪宿芙蓉山主人",
+        "id": "mb-fengxue-su-furongshan"
+      },
+      {
+        "dynasty": "唐",
+        "author": "杜甫",
+        "lines": [
+          { "characters": ["锦", "城", "丝", "管", "日", "纷", "纷"], "pinyins": ["jǐn", "chéng", "sī", "guǎn", "rì", "fēn", "fēn"] },
+          { "characters": ["半", "入", "江", "风", "半", "入", "云"], "pinyins": ["bàn", "rù", "jiāng", "fēng", "bàn", "rù", "yún"] },
+          { "characters": ["此", "曲", "只", "应", "天", "上", "有"], "pinyins": ["cǐ", "qǔ", "zhǐ", "yīng", "tiān", "shàng", "yǒu"] },
+          { "characters": ["人", "间", "能", "得", "几", "回", "闻"], "pinyins": ["rén", "jiān", "néng", "dé", "jǐ", "huí", "wén"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "音乐", "讽喻"],
+        "annotations": [
+          {
+            "translation": [
+              "锦官城里每日弦乐管乐声纷纷扬扬。",
+              "乐声一半随江风飘散，一半飘入云端。",
+              "这样美妙的乐曲只应该天上有。",
+              "人间能听到几回呢？"
+            ],
+            "annotation": [
+              "花卿：指成都尹崔光远的部将花敬定。",
+              "丝管：弦乐器和管乐器，这里指音乐。",
+              "纷纷：形容乐曲声轻柔悠扬、连绵不断。"
+            ]
+          }
+        ],
+        "title": "赠花卿",
+        "id": "mb-zeng-huaqing"
+      },
+      {
+        "dynasty": "唐",
+        "author": "杜牧",
+        "lines": [
+          { "characters": ["银", "烛", "秋", "光", "冷", "画", "屏"], "pinyins": ["yín", "zhú", "qiū", "guāng", "lěng", "huà", "píng"] },
+          { "characters": ["轻", "罗", "小", "扇", "扑", "流", "萤"], "pinyins": ["qīng", "luó", "xiǎo", "shàn", "pū", "liú", "yíng"] },
+          { "characters": ["天", "阶", "夜", "色", "凉", "如", "水"], "pinyins": ["tiān", "jiē", "yè", "sè", "liáng", "rú", "shuǐ"] },
+          { "characters": ["卧", "看", "牵", "牛", "织", "女", "星"], "pinyins": ["wò", "kàn", "qiān", "niǔ", "zhī", "nǚ", "xīng"] }
+        ],
+        "keywords": ["小学古诗", "必背古诗", "七夕", "宫怨"],
+        "annotations": [
+          {
+            "translation": [
+              "秋夜里，银白的蜡烛发出微弱的光，给画屏添了几分清冷。",
+              "一位宫女手拿轻巧的丝质小扇，扑打着飞来飞去的萤火虫。",
+              "夜色渐深，石阶上的凉气像水一样沁人。",
+              "她躺着仰望天空，望着天上的牵牛星和织女星。"
+            ],
+            "annotation": [
+              "画屏：绘有图画的屏风。",
+              "轻罗小扇：轻薄丝制的团扇。",
+              "天阶：皇宫中的石阶。",
+              "牵牛织女星：天上的两个星座，与牛郎织女的故事有关。"
+            ]
+          }
+        ],
+        "title": "秋夕",
+        "id": "mb-qiuxi"
       }
     ]
   ]

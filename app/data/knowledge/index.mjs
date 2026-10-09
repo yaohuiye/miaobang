@@ -1,17 +1,18 @@
 import { english } from './english.mjs'
+import { englishTextbook } from './english-textbook.mjs'
 import { idioms, reading } from './chinese.mjs'
 import { math } from './math.mjs'
 import { science } from './science.mjs'
 export const SUBJECTS = [
-  { id: 'english', name: '英语', icon: 'Aa', note: '词汇 · 生活句型', scope: '外研版学习方向；先做基础复习与通用句型。一年级/三年级起点及版次待核对，不标教材单元。' },
+  { id: 'english', name: '英语', icon: 'Aa', note: '课本同步 · 词汇 · 句型', scope: '外研版（三年级起点）四年级上、下册课本词表同步，加基础复习与通用句型。课本词按 Module 整理，以孩子手里的课本为准；基础复习部分不标教材单元。' },
   { id: 'idiom', name: '成语', icon: '言', note: '懂意思 · 会运用', scope: '人教版语文学习方向；常用成语积累与情境运用，不代表课本必背清单。' },
   { id: 'math', name: '数学', icon: '＋', note: '概念 · 方法 · 易错点', scope: '人教版数学学习方向；整理数与运算、图形、统计、生活应用，含基础复习。公顷、三角形内角和与三边关系先列拓展，多位小数运算列进阶；具体册次以实际课本为准。' },
   { id: 'science', name: '十万个为什么', icon: '？', note: '太空 · 天气 · 厦门海边', scope: '亲子好奇拓展。包含太阳系、天气观察、光、水与海洋主题；不是十万条内容，也不是教材必考范围。' },
   { id: 'reading', name: '阅读与表达', icon: '文', note: '会读 · 会想 · 会表达', scope: '依据三至四年级语文学段方向，练习理解、提问、复述和表达。例文与练习为原创。' }
 ]
-export const entries = [...english, ...idioms, ...math, ...science, ...reading]
+export const entries = [...english, ...englishTextbook, ...idioms, ...math, ...science, ...reading]
 export const entryById = new Map(entries.map(entry => [entry.id, entry]))
-export const sourceDate = '2026-10-04'
+export const sourceDate = '2026-10-06'
 const source = (title, url, role = '科学解释核对') => ({ title, url, role })
 export const SOURCES = {
   curriculum: source('教育部 · 义务教育课程方案和课程标准（2022年版）', 'https://hudong.moe.gov.cn/srcsite/A26/s8001/202204/t20220420_619921.html', '学段范围参考；非逐条释义来源'),
