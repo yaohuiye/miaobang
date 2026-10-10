@@ -41,6 +41,7 @@ export default {
     }
   },
   onLoad() { this.readBest() },
+  onShow() { if (this.board && !this.finished) this.setTicker() },
   onUnload() { clearInterval(this.ticker) },
   onHide() { clearInterval(this.ticker) },
   methods: {
@@ -59,15 +60,16 @@ export default {
         if (!this.board) {
           this.board = createBoard(Math.random, row, col)
           this.startedAt = Date.now()
-          clearInterval(this.ticker)
-          this.ticker = setInterval(() => { if (!this.finished) this.seconds = Math.floor((Date.now() - this.startedAt) / 1000) }, 1000)
+          this.setTicker()
         }
-        const board = this.flagMode && !this.board.cells[row * this.boardCols + col].mine ? toggleFlag(this.board, row, col) : reveal(this.board, row, col).board
+        const board = this.flagMode ? toggleFlag(this.board, row, col) : reveal(this.board, row, col).board
         this.board = board
         if (isLost(board)) { this.finish('lose'); return }
         if (isWon(board)) this.finish('win')
       } catch (error) { this.error = error.message }
     },
+    tick() { if (!this.finished) this.seconds = Math.floor((Date.now() - this.startedAt) / 1000) },
+    setTicker() { clearInterval(this.ticker); this.tick(); this.ticker = setInterval(this.tick, 1000) },
     finish(result) {
       this.finished = true
       this.result = result

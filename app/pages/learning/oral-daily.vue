@@ -19,7 +19,7 @@
     </view>
 
     <view v-if="questions.length && !finished" class="card quiz">
-      <view class="row quiz-head"><text class="muted">{{ practice === 'wrong' ? '错题重练' : '每日一组' }} · 已答 {{ answered }}/{{ questions.length }} · 用时 {{ elapsedText }}</text><button class="link" @click="giveUp">先不做了</button></view>
+      <view class="row quiz-head"><text class="muted">{{ practice === 'wrong' ? '错题重练' : '每日一组' }} · 已答 {{ answered }}/{{ questions.length }} · 用时 {{ elapsed }}</text><button class="link" @click="giveUp">先不做了</button></view>
       <view v-for="(item, index) in questions" :key="item.id" class="question">
         <text class="question-text">{{ item.text }}</text>
         <view class="answer-box">
@@ -67,7 +67,10 @@ export default {
     answered() { return this.questions.filter(item => item.isAnswered).length },
     recent() { return this.state.history.slice(0, 14) }
   },
-  onShow() { try { this.state = oralStore.read(); this.error = '' } catch (error) { this.error = error.message || '本机记录读取失败，仍可继续做题。' } },
+  onShow() {
+    try { this.state = oralStore.read(); this.error = '' } catch (error) { this.error = error.message || '本机记录读取失败，仍可继续做题。' }
+    if (this.questions.length && !this.finished) this.setTicker()
+  },
   onHide() { clearInterval(this.ticker) },
   onUnload() { clearInterval(this.ticker) },
   methods: {
@@ -75,9 +78,7 @@ export default {
       this.practice = practice
       this.questions = questions.map(question => ({ ...question, userAnswer: '', isAnswered: false, isCorrect: false }))
       this.startedAt = Date.now()
-      this.tick()
-      clearInterval(this.ticker)
-      this.ticker = setInterval(this.tick, 1000)
+      this.setTicker()
     },
     startRound() {
       this.error = ''
@@ -94,6 +95,7 @@ export default {
       this.lastResult = null
       this.beginQuestions(questions, 'wrong')
     },
+    setTicker() { clearInterval(this.ticker); this.tick(); this.ticker = setInterval(this.tick, 1000) },
     tick() { this.elapsed = this.secondsText(Math.round((Date.now() - this.startedAt) / 1000)) },
     secondsText(seconds) { return seconds >= 60 ? `${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒` : `${seconds} 秒` },
     checkQuestion(index) {

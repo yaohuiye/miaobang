@@ -56,7 +56,7 @@ export default {
     previewRows() { return this.nextPiece ? this.nextPiece.shape : [[0, 0, 0, 0]] }
   },
   onLoad() { this.readBest() },
-  onHide() { clearInterval(this.ticker) },
+  onHide() { this.running = false; clearInterval(this.ticker) },
   onUnload() { clearInterval(this.ticker) },
   methods: {
     readBest() { try { this.best = bestText(arcadeStore.read(), 'tetris'); this.error = '' } catch (error) { this.error = error.message } },

@@ -40,7 +40,7 @@ export default {
     }
   },
   onLoad() { this.readBest() },
-  onHide() { clearInterval(this.ticker) },
+  onHide() { this.running = false; clearInterval(this.ticker) },
   onUnload() { clearInterval(this.ticker) },
   methods: {
     readBest() { try { this.best = bestText(arcadeStore.read(), 'snake'); this.error = '' } catch (error) { this.error = error.message } },

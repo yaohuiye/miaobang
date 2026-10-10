@@ -1,10 +1,13 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import poems from '../data/poems.js'
+import { readFileSync } from 'node:fs'
 import { compositions, compositionById } from '../data/compositions.mjs'
 import { englishTextbook } from '../data/knowledge/english-textbook.mjs'
 import { english } from '../data/knowledge/english.mjs'
 
+// Load the app's ES module without changing how Node 20 interprets other .js files.
+const poemSource = readFileSync(new URL('../data/poems.js', import.meta.url))
+const { default: poems } = await import(`data:text/javascript;base64,${poemSource.toString('base64')}`)
 const allPoems = poems.flat(2)
 const added = allPoems.filter(poem => poem.id.startsWith('mb-'))
 const PINYIN = /^[a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]+$/
