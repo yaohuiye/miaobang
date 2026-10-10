@@ -1,10 +1,11 @@
-// 四个街机小游戏共用的本机最佳成绩：扫雷记最快用时（越低越好），其余记最高分。
+// 街机小游戏共用的本机最佳成绩：扫雷记最快用时（越低越好），其余记最高分。
 export const ARCADE_KEY = 'miaobang.arcade.v1'
 export const ARCADE_GAMES = {
   mines: { label: '扫雷', unit: '秒', better: 'low' },
   tetris: { label: '俄罗斯方块', unit: '分', better: 'high' },
   match: { label: '消消乐', unit: '分', better: 'high' },
-  snake: { label: '贪吃蛇', unit: '分', better: 'high' }
+  snake: { label: '贪吃蛇', unit: '分', better: 'high' },
+  plane: { label: '纸翼飞行队', unit: '分', better: 'high' }
 }
 
 export function emptyArcade() {

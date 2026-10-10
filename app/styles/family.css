@@ -19,3 +19,6 @@
 .family-page .input { height: 48px; padding: 0 14px; border: 1px solid #d5e2f3; background: #f8fbff; border-radius: 12px; font-size: 14px; color: #234569; box-sizing: border-box; }
 
 .family-page button { min-height:44px; white-space:normal; }.family-page .primary { min-height:50px; }.family-page input,.family-page textarea { font-family:inherit; }.family-page .section-heading { line-height:1.5; }
+
+/* 大屏入口采用宽布局，任务与旧棋盘仍保留易读的内容宽度。 */
+@media(min-width:768px) { .family-page.home,.family-page.library,.family-page.laboratory,.family-page.plane-page { max-width:1120px;padding:28px 32px 48px; } }

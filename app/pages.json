@@ -1,6 +1,9 @@
 {
 	"pages": [
         { "path": "pages/home/index", "style": { "navigationBarTitleText": "妙帮", "navigationBarBackgroundColor": "#f4f8ff" } },
+        { "path": "pages/lab/index", "style": { "navigationBarTitleText": "好奇实验室", "navigationBarBackgroundColor": "#f1f7f5" } },
+        { "path": "pages/games/plane", "style": { "navigationBarTitleText": "纸翼飞行队", "navigationBarBackgroundColor": "#f0f5f6" } },
+
         { "path": "pages/learning/entry", "style": { "navigationBarTitleText": "知识口袋", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/games/light", "style": { "navigationBarTitleText": "光线救援站", "navigationBarBackgroundColor": "#f3f7fc" } },
         { "path": "pages/games/numbers", "style": { "navigationBarTitleText": "数字搭桥", "navigationBarBackgroundColor": "#f4f8ff" } },

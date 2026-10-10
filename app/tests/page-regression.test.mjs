@@ -6,6 +6,8 @@ import * as mines from '../game/minesweeper.mjs'
 import * as snake from '../game/snake.mjs'
 import * as tetris from '../game/tetris.mjs'
 import * as oral from '../math/oral.mjs'
+import * as plane from '../game/plane.mjs'
+import * as lab from '../lab/experiments.mjs'
 
 // Execute actual page methods with fake storage and time; no real intervals or phone are needed.
 function loadPage(name, bindings) {
@@ -23,7 +25,9 @@ function loadPage(name, bindings) {
     oralStore: { read: oral.emptyState },
     Date: class extends Date { static now() { return now } },
     setInterval: callback => { timers.set(++nextId, callback); return nextId },
-    clearInterval: id => timers.delete(id)
+    clearInterval: id => timers.delete(id),
+    setTimeout: callback => { timers.set(++nextId, callback); return nextId },
+    clearTimeout: id => timers.delete(id)
   })
   const state = page.data()
   for (const [name, method] of Object.entries(page.methods)) state[name] = method.bind(state)
@@ -111,4 +115,36 @@ test('oral quiz renders elapsed time and resumes display updates after returning
   page.hide()
   page.show()
   assert.equal(page.timers.size, 0)
+})
+
+test('plane page pauses on hide and resumes without resetting the mission or accumulating intervals', () => {
+  const page = loadPage('games/plane', plane)
+  page.state.draw = () => {}
+  page.state.start()
+  page.advance(1)
+  const before = JSON.stringify(page.state.game)
+  page.hide()
+  assert.equal(page.state.game.status, 'paused')
+  assert.equal(page.timers.size, 0)
+  page.advance(100)
+  assert.equal(page.state.game.time, JSON.parse(before).time)
+  page.state.start()
+  page.state.start()
+  assert.equal(page.timers.size, 1)
+  assert.equal(page.state.game.score, JSON.parse(before).score)
+  page.hide()
+})
+test('lab page stops its experiment animation and sound when hidden', () => {
+  const page = loadPage('lab/index', lab)
+  page.state.selected = lab.EXPERIMENTS.find(e => e.id === 'ramp')
+  page.state.params = lab.defaults(page.state.selected)
+  page.state.result = lab.observe('ramp', page.state.params)
+  page.state.draw = () => {}
+  let stopped = 0
+  page.state.audio = { stop: () => stopped++ }
+  page.state.run()
+  assert.equal(page.timers.size, 1)
+  page.hide()
+  assert.equal(page.timers.size, 0)
+  assert.equal(stopped, 1)
 })
