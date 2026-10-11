@@ -4,6 +4,7 @@
 | --- | --- |
 | 550 张知识卡、题目、关卡、安全情境 | 项目编写；课程/科学核查链接位于 app/data/knowledge/index.mjs 及场景文件。引用链接不表示第三方网页适用 MIT |
 | UI 图标与安全插画 | app/scripts/draw-ui-assets.py 原创绘制；PNG 随仓库提供，绘图工具 Pillow 自有许可 |
+| 活动入口图标 | app/scripts/draw-activity-icons.py 原创绘制的 27 个本地 PNG；统一 192×192、浅色圆角底、蓝色轮廓与柔和色块，替代首页、知识口袋游戏入口、实验室与飞行页面的系统表情 |
 | App 桌面 Logo | AI 图像生成工具生成的小妙与小红花；static/app-icon 中提供原图及安卓各尺寸 |
 | 小妙机器人 | AI 图像生成工具生成的项目角色 |
 | static/icons | 用项目原创图标替换原始许可未明确的旧图标 |
