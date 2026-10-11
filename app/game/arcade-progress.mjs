@@ -5,6 +5,7 @@ export const ARCADE_GAMES = {
   tetris: { label: '俄罗斯方块', unit: '分', better: 'high' },
   match: { label: '消消乐', unit: '分', better: 'high' },
   snake: { label: '贪吃蛇', unit: '分', better: 'high' },
+  jump: { label: '跳一跳', unit: '分', better: 'high' },
   plane: { label: '纸翼飞行队', unit: '分', better: 'high' }
 }
 

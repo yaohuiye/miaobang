@@ -25,7 +25,8 @@ export default {
       {name:'拼词小工坊',copy:'把字母拼成一个词',icon:'spell',url:'/pages/games/english?mode=spell'},
       {name:'扫雷',copy:'看数字，安全排雷',icon:'mines',url:'/pages/games/minesweeper'},
       {name:'俄罗斯方块',copy:'转一转，填满一行',icon:'tetris',url:'/pages/games/tetris'},
-      {name:'消消乐',copy:'三个一样就消掉',icon:'match',url:'/pages/games/match'},
+      {name:'消消乐',copy:'12 关果园探险',icon:'match',url:'/pages/games/match'},
+      {name:'跳一跳',copy:'按住蓄力，松手跳小岛',icon:'jump',url:'/pages/games/jump'},
       {name:'纸翼飞行队',copy:'拖动飞机，躲避与发射',icon:'plane',url:'/pages/games/plane'},
       {name:'贪吃蛇',copy:'带小蛇去吃苹果',icon:'snake',url:'/pages/games/snake'}
     ], active: null, phaseLabels: PHASE_LABELS, error: '', ticker: null } },

@@ -23,6 +23,8 @@ export function stepPlane(s,dt,random=Math.random){
   if(s.time>=FIELD.duration&&s.status==='running'){s.time=FIELD.duration;s.status='complete'}
   return s
 }
+export function beginPlaneDrag(state, point){return {finger:{...point},player:{...state.player}}}
+export function dragPlane(state, anchor, point){if(!anchor)return;movePlane(state,anchor.player.x+point.x-anchor.finger.x,anchor.player.y+point.y-anchor.finger.y)}
 export function touchPosition(touch,rect){
   // uni-app 的 x/y 为画布内坐标；浏览器的 clientX/clientY 为视口坐标。
   const x=Number.isFinite(touch.x)?touch.x:touch.clientX-rect.left
