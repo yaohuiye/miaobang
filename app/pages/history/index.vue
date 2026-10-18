@@ -3,6 +3,7 @@
     <text class="eyebrow">妙帮 · 留在这部手机里的记录</text>
     <text class="title">一起做过的小事</text>
     <text class="intro">记录尝试，也记录需要休息的时候。<br />计时只是运行时长，不代表注意力水平。</text>
+    <button class="primary garden-link" @click="learning">看看我的探索等级与学习进度</button>
     <button class="secondary garden-link" @click="garden">看看成长小花园与亲子回顾</button>
     <text v-if="error" class="error">{{ error }}</text>
     <button v-if="error" class="secondary" @click="refresh">重新读取</button>
@@ -21,6 +22,7 @@ export default {
     refresh() { try { const { state } = focusService.snapshot(); this.active = state.active; this.records = state.history; this.loaded = true; this.error = '' } catch (error) { this.error = error.message } },
     date(value) { const date = new Date(value); return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}` },
     elapsed: elapsedText,
+    learning(){uni.navigateTo({url:'/pages/growth/learning'})},
     garden() { uni.navigateTo({url:'/pages/growth/index'}) },
     focus() { uni.navigateTo({ url: '/pages/focus/timer' }) }
   }

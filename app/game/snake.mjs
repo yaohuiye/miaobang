@@ -31,10 +31,10 @@ export function step(snake, random = Math.random) {
   const { rows, cols } = snake
   const delta = DIRECTIONS[snake.direction]
   const head = { x: snake.cells[0].x + delta.x, y: snake.cells[0].y + delta.y }
-  if (head.x < 0 || head.y < 0 || head.x >= cols || head.y >= rows) return { snake, ate: false, dead: true }
+  if (head.x < 0 || head.y < 0 || head.x >= cols || head.y >= rows) return { snake, ate: false, dead: true, reason:'wall' }
   const ate = head.x === snake.food.x && head.y === snake.food.y
   const body = ate ? snake.cells : snake.cells.slice(0, -1)
-  if (body.some(cell => cell.x === head.x && cell.y === head.y)) return { snake, ate, dead: true }
+  if (body.some(cell => cell.x === head.x && cell.y === head.y)) return { snake, ate, dead: true, reason:'self' }
   const cells = [head, ...body]
   const score = snake.score + (ate ? 10 : 0)
   const food = ate ? placeFood(cells, random, rows, cols) : snake.food

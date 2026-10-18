@@ -1,0 +1,7 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import {explorerProgress,LEARNING_MILESTONES,readExplorerBadges,awardExplorerBadges} from '../growth/learning.mjs'
+test('growth starts at zero and each finite milestone rewards once',()=>{assert.equal(explorerProgress().points,0);assert.equal(explorerProgress().title,'观察员');assert.equal(LEARNING_MILESTONES.length,18);const metrics={english:{recognized:5,assembled:10,written:10}};const s=explorerProgress(metrics);assert.equal(s.points,60);assert.equal(s.level,2);metrics.english.written=10000;assert.equal(explorerProgress(metrics).points,60)})
+test('all six domains have bounded rewards and a reachable final level',()=>{const metrics={};for(const m of LEARNING_MILESTONES){metrics[m.domain]||={};metrics[m.domain][m.metric]=100000}const s=explorerProgress(metrics);assert.equal(s.points,360);assert.equal(s.title,'发现家');assert.equal(s.percent,100);assert.equal(s.next,null);assert.equal(s.domains.length,6)})
+
+test('earned badges remain earned when a later practice uncovers a weakness',()=>{const earned=awardExplorerBadges('',{math:{steadyKinds:4,mastered:3}},10);assert.equal(Object.keys(earned.earned).length,2);const next=awardExplorerBadges(earned,{math:{steadyKinds:0,mastered:0}},20);assert.deepEqual(next,earned);assert.equal(explorerProgress({},Object.keys(next.earned)).points,40);assert.throws(()=>readExplorerBadges({version:2,earned:{}}));assert.throws(()=>readExplorerBadges({version:1,earned:{fake:10}}))})

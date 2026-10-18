@@ -45,9 +45,8 @@ function makeQuestion(kind, random) {
     return { kind, text: `${a}万－${b}万`, answer: a - b, unit: '万', accept: [a - b] }
   }
   if (kind === 'm1') {
-    let a = 0
-    let b = 0
-    do { a = 12 + Math.floor(random() * 78); b = 3 + Math.floor(random() * 7) } while (a * b > 999)
+    const a = 12 + Math.floor(random() * 78)
+    const b = 3 + Math.floor(random() * 7)
     return { kind, text: `${a}×${b}`, answer: a * b, accept: [a * b] }
   }
   if (kind === 'm2') {
@@ -70,22 +69,17 @@ function makeQuestion(kind, random) {
   if (kind === 'est-m') {
     let a = 0
     let b = 0
-    do { a = 19 + Math.floor(random() * 70); b = 19 + Math.floor(random() * 70) } while (a % 10 === 0 && b % 10 === 0)
+    a = 19 + Math.floor(random() * 70); b = 19 + Math.floor(random() * 70)
+    if (a % 10 === 0 && b % 10 === 0) a += 1
     const estimate = round10(a) * round10(b)
     return { kind, text: `${a}×${b}≈`, answer: estimate, accept: [estimate, a * b] }
   }
-  // est-d：被除数接近整十数的整倍数，四舍五入后恰好整除。
-  let b = pick(random, [20, 30, 40, 50, 60, 70, 80])
-  let quotient = 2 + Math.floor(random() * 8)
-  let estimateBase = b * quotient
-  if (estimateBase > 700) return makeQuestion(kind, random)
-  const spread = Math.floor(b / 2) - 1
-  const offset = spread <= 0 ? 0 : Math.floor(random() * (spread * 2 + 1)) - spread
-  const a = estimateBase + offset
-  if (a <= b || round10(a) !== estimateBase) return makeQuestion(kind, random)
-  const accept = [quotient]
-  if (a % b === 0) accept.push(a / b)
-  return { kind, text: `${a}÷${b}≈`, answer: quotient, accept, note: '把被除数看作整十数再口算' }
+  // 让被除数落在所选整倍数的四舍五入区间内，无需反复抽签。
+  const b = pick(random, [20, 30, 40, 50, 60, 70, 80])
+  const quotient = 2 + Math.floor(random() * 8)
+  const estimateBase = b * quotient
+  const a = estimateBase + Math.floor(random() * 10) - 5
+  return { kind, text: `${a}÷${b}≈`, answer: quotient, accept: [quotient], note: '把被除数四舍五入到整十数再口算' }
 }
 
 // random 由调用方注入（页面用 Math.random，测试用固定种子），同一序列生成同一轮题目。
@@ -104,6 +98,52 @@ export function buildRound(random = Math.random, quotas = DAILY_QUOTAS) {
     ;[questions[i], questions[j]] = [questions[j], questions[i]]
   }
   return questions
+}
+
+// 同题型换数字；即使重复随机源也必须换题，不能靠记住原题完成复习。
+export function buildVariant(question, random = Math.random, excludedTexts = []) {
+  if (!question || !KIND_ORDER.includes(question.kind)) throw new Error('这道题的题型无法识别，暂不安排变式。')
+  for (let tries = 0; tries < 64; tries += 1) {
+    const source = tries < 16 ? random : () => (tries - 15) / 50
+    const candidate = buildRound(source, { [question.kind]: 1 })[0]
+    if (candidate.text !== question.text && !excludedTexts.includes(candidate.text)) return candidate
+  }
+  throw new Error('暂时没能生成新题，请再试一次。')
+}
+
+export function explainQuestion(question) {
+  const kind = question?.kind
+  const pattern = kind === 'sw-add' ? /^(\d+)万＋(\d+)万$/ : kind === 'sw-sub' ? /^(\d+)万－(\d+)万$/
+    : ['m1', 'm2', 'm3'].includes(kind) ? /^(\d+)×(\d+)$/
+      : kind === 'd1' ? /^(\d+)÷(\d+)$/ : kind === 'est-m' ? /^(\d+)×(\d+)≈$/ : kind === 'est-d' ? /^(\d+)÷(\d+)≈$/ : null
+  const match = pattern && typeof question.text === 'string' && question.text.match(pattern)
+  if (!match) return { title: '先核对题目', steps: ['这道旧题的格式无法解析，暂不展示分步说明；可以练一道同类新题。'] }
+  const [a, b] = match.slice(1).map(Number)
+  const answer = kind === 'sw-add' ? a + b : kind === 'sw-sub' ? a - b
+    : kind === 'd1' ? a / b : kind === 'est-m' ? round10(a) * round10(b)
+      : kind === 'est-d' ? round10(a) / b : a * b
+  if (!Number.isInteger(answer) || answer !== question.answer || !question.accept?.includes(answer)) {
+    return { title: '先核对题目', steps: ['这道旧题的答案信息与计算不一致，暂不展示说明；可以练一道同类新题。'] }
+  }
+  let steps
+  if (kind === 'sw-add' || kind === 'sw-sub') {
+    const op = kind === 'sw-add' ? '＋' : '－'
+    steps = ['两个数都以“万”为单位，先计算前面的数。', `${a}${op}${b}＝${answer}。`, `把单位“万”带回去：${question.text}＝${answer}万。`]
+  } else if (kind === 'm1') {
+    const tens = Math.floor(a / 10) * 10; const ones = a % 10
+    steps = [`把 ${a} 拆成 ${tens} 和 ${ones}。`, `${tens}×${b}＝${tens * b}，${ones}×${b}＝${ones * b}。`, `两部分相加：${tens * b}＋${ones * b}＝${answer}。`]
+  } else if (kind === 'm2') {
+    steps = [`${a} 是 ${a / 10} 个十。`, `先算 ${a / 10}×${b}＝${a / 10 * b}。`, `得到 ${a / 10 * b} 个十，也就是 ${answer}。`]
+  } else if (kind === 'm3') {
+    steps = [`${b}＝${b / 10}×10。`, `先算 ${a}×${b / 10}＝${a * (b / 10)}。`, `再乘 10：${a * (b / 10)}×10＝${answer}。`]
+  } else if (kind === 'd1') {
+    steps = ['被除数和除数同时除以 10，商不变。', `${a}÷${b}＝${a / 10}÷${b / 10}＝${answer}。`, `用乘法检查：${b}×${answer}＝${a}。`]
+  } else if (kind === 'est-m') {
+    steps = [`四舍五入到整十数：${a}≈${round10(a)}，${b}≈${round10(b)}。`, `再算 ${round10(a)}×${round10(b)}＝${answer}。`, `所以 ${a}×${b}≈${answer}。本练习也兼容精确积 ${a * b}，但估算要练习先取整。`]
+  } else {
+    steps = [`把被除数四舍五入到整十数：${a}≈${round10(a)}，除数 ${b} 不变。`, `${round10(a)}÷${b}＝${answer}。`, `所以 ${a}÷${b}≈${answer}；这是估算结果。`]
+  }
+  return { title: KIND_LABELS[kind], steps }
 }
 
 export function judgeAnswer(question, input) {
@@ -243,6 +283,15 @@ export function createOralStore(storage) {
       const next = recordAttempt(this.read(), attempt, wrongQuestions)
       storage.set(ORAL_KEY, next)
       return next
+    },
+    saveOnce(attempt, wrongQuestions = []) {
+      const current = this.read()
+      const existing = current.history.find(record => record.id === `oral-${attempt.id}`)
+      if (!existing) return this.save(attempt, wrongQuestions)
+      if (existing.date !== attempt.date || existing.correct !== attempt.correct || existing.seconds !== attempt.seconds || existing.endedAt !== attempt.endedAt) {
+        throw new Error('这轮记录的编号已被另一份成绩使用，请保留当前页面。')
+      }
+      return current
     },
     pruneWrong(ids) {
       const next = pruneWrong(this.read(), ids)

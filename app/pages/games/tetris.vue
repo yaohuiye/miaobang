@@ -1,10 +1,10 @@
 <template>
   <view class="family-page tetris-page">
     <text class="eyebrow">小妙的益智游乐场 · 手眼协调</text><text class="title">俄罗斯方块</text>
-    <text class="intro">左右滑动移动 · 轻点旋转 · 向下滑后松手落到底</text>
+    <text class="intro">左右滑动移动 · 轻点旋转 · 下滑松手落到底。每消 5 行提速一级。</text>
     <text v-if="error" class="error">{{ error }}</text>
     <view class="row board-head">
-      <text class="muted">得分 {{ score }}</text>
+      <text class="muted">Lv.{{ Math.floor(lines/5)+1 }} · 得分 {{ score }}</text>
       <text class="muted">消了 {{ lines }} 行</text>
       <text v-if="best" class="muted">{{ best }}</text>
     </view>
@@ -89,7 +89,7 @@ export default {
       this.running = true
       this.setTicker()
     },
-    setTicker() { clearInterval(this.ticker); this.ticker = setInterval(this.tick, 700) },
+    setTicker() { clearInterval(this.ticker); this.ticker = setInterval(this.tick, Math.max(180,700-Math.floor(this.lines/5)*70)) },
     tick() {
       if (!this.running || this.over) return
       if (!collides(this.board, this.piece, 0, 1)) this.piece = { ...this.piece, y: this.piece.y + 1 }
@@ -114,6 +114,7 @@ export default {
       this.board = result.board
       this.score += lineScore(result.lines)
       this.lines += result.lines
+      if(result.lines&&this.running)this.setTicker()
       const spawned = bagPiece(this.queue, Math.random)
       this.piece = this.nextPiece
       this.nextPiece = spawned.piece

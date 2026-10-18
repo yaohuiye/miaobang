@@ -85,11 +85,13 @@ export function resolveBoard(grid, random = Math.random, kinds = MATCH_KINDS) {
   let current = clone(grid)
   let cleared = 0
   let cascades = 0
+  const collected=Array.from({length:kinds},()=>0)
   for (;;) {
     const hits = findMatches(current)
-    if (!hits.size) return { grid: current, cleared, cascades }
+    if (!hits.size) return { grid: current, cleared, cascades, collected }
     for (const hit of hits) {
       const [row, col] = hit.split('-').map(Number)
+      collected[current[row][col]]+=1
       current[row][col] = -1
     }
     current = applyGravity(current, random, kinds).grid

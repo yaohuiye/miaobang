@@ -1,18 +1,18 @@
 <template>
   <view class="family-page snake-page">
     <text class="eyebrow">小妙的益智游乐场 · 反应小挑战</text><text class="title">贪吃蛇</text>
-    <text class="intro">用方向按钮带小蛇去吃苹果，每吃一个长一节、加 10 分。<br />撞到墙或咬到自己就结束；这一版走得慢，来得及想。</text>
+    <text class="intro">在棋盘上滑动改变方向，也可以用方向按钮。每吃 3 个苹果提速一级，先想好下一次转弯。</text>
     <text v-if="error" class="error">{{ error }}</text>
     <view class="row board-head">
-      <text class="muted">长度 {{ snake ? snake.cells.length : 3 }}</text>
+      <text class="muted">Lv.{{ snake ? Math.floor(snake.score/30)+1 : 1 }} · 长度 {{ snake ? snake.cells.length : 3 }}</text>
       <text class="muted">得分 {{ snake ? snake.score : 0 }}</text>
       <text v-if="best" class="muted">{{ best }}</text>
     </view>
     <view class="card board-card">
-      <view class="snake-grid">
+      <view class="snake-grid" @touchstart.stop="swipeStart" @touchmove.stop.prevent="noop" @touchend="swipeEnd" @touchcancel="swipe=null">
         <view v-for="(cell, index) in flatCells" :key="index" :class="['scell', cell]"></view>
       </view>
-      <text v-if="over" class="result">小蛇到了 {{ snake.score }} 分、{{ snake.cells.length }} 节。想一想刚才是在哪里撞的，再来一局会更稳。</text>
+      <text v-if="over" class="result">小蛇到了 {{ snake.score }} 分、{{ snake.cells.length }} 节。{{ deathReason==='wall'?'这次撞到了边界，下次提前一个格子转弯试试。':'这次碰到了自己的身体，试着留出回转空间。' }}</text>
       <view class="actions"><button class="primary" @click="start">{{ over || !snake ? '开始新的一局' : (running ? '暂停' : '继续') }}</button></view>
       <template v-if="snake && running">
         <view class="pad"><text></text><button @click="go('up')">↑ 上</button><text></text></view>
@@ -27,7 +27,7 @@ import { createSnake, turn, step, SNAKE_COLS, SNAKE_ROWS } from '@/game/snake.mj
 import { arcadeStore } from '@/services/arcade.js'
 import { bestText } from '@/game/arcade-progress.mjs'
 export default {
-  data() { return { snake: null, cols: SNAKE_COLS, running: false, over: false, best: '', error: '', ticker: null } },
+  data() { return { snake: null, cols: SNAKE_COLS, running: false, over: false, best: '', error: '', ticker: null,swipe:null,deathReason:'' } },
   computed: {
     flatCells() {
       if (!this.snake) return Array.from({ length: SNAKE_ROWS * SNAKE_COLS }, () => '')
@@ -43,6 +43,7 @@ export default {
   onHide() { this.running = false; clearInterval(this.ticker) },
   onUnload() { clearInterval(this.ticker) },
   methods: {
+    noop(){},swipeStart(e){if(!this.running)return;const t=e.touches[0];this.swipe={x:t.clientX,y:t.clientY}},swipeEnd(e){const a=this.swipe;this.swipe=null;if(!a||!this.running)return;const t=e.changedTouches[0],dx=t.clientX-a.x,dy=t.clientY-a.y;if(Math.max(Math.abs(dx),Math.abs(dy))<15)return;this.go(Math.abs(dx)>Math.abs(dy)?(dx>0?'right':'left'):(dy>0?'down':'up'))},
     readBest() { try { this.best = bestText(arcadeStore.read(), 'snake'); this.error = '' } catch (error) { this.error = error.message } },
     start() {
       if (this.snake && !this.over) {
@@ -57,7 +58,7 @@ export default {
       this.error = ''
       this.setTicker()
     },
-    setTicker() { clearInterval(this.ticker); this.ticker = setInterval(this.tick, 600) },
+    setTicker() { clearInterval(this.ticker); this.ticker = setInterval(this.tick, Math.max(160,600-Math.floor(this.snake.score/30)*40)) },
     go(direction) {
       if (!this.snake || this.over) return
       this.snake = turn(this.snake, direction)
@@ -67,7 +68,9 @@ export default {
       try {
         const result = step(this.snake, Math.random)
         this.snake = result.snake
+        if(result.ate)this.setTicker()
         if (result.dead) {
+          this.deathReason=result.reason
           this.over = true
           this.running = false
           clearInterval(this.ticker)
@@ -85,7 +88,7 @@ export default {
 .snake-page .intro { display:block; margin:8px 0 14px; color:#526b86; font-size:14px; line-height:1.8; }
 .board-head { margin-bottom:10px; font-size:14px; }
 .board-card { padding:12px; }
-.snake-grid { display:grid; grid-template-columns:repeat(14, 1fr); gap:2px; background:#eef4fa; padding:6px; border-radius:12px; }
+.snake-grid { touch-action:none; display:grid; grid-template-columns:repeat(14, 1fr); gap:2px; background:#eef4fa; padding:6px; border-radius:12px; }
 .scell { width:100%; aspect-ratio:1; border-radius:3px; background:#fff; }
 .scell.head { background:#2f8f5b; }
 .scell.body { background:#8fd0ae; }

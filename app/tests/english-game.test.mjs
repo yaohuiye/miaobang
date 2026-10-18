@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { english } from '../data/knowledge/english.mjs'
 import { ENGLISH_AUDIO } from '../data/knowledge/english-audio.mjs'
-import { words, wordPool, buildWordRound, spellResult } from '../game/english.mjs'
+import { words, wordPool, hasWordAudio, buildWordRound, spellResult, inputResult } from '../game/english.mjs'
 import { createLessonPlayer } from '../knowledge/audio.mjs'
 
 test('all 300 cards have matching, bundled AAC word and example clips', () => {
@@ -26,14 +26,14 @@ test('all 300 cards have matching, bundled AAC word and example clips', () => {
   assert.deepEqual([...files].sort(),readdirSync(new URL('../static/english/',import.meta.url)).sort())
 })
 test('games use vocabulary only and intersect topic with the actual review shelf', () => {
-  assert.equal(words.length,288)
+  assert.equal(words.length,461)
   assert.equal(wordPool('学校与学习').length,12)
   assert.deepEqual(wordPool('',[]),[])
   assert.deepEqual(wordPool('学校与学习',['en-apple','en-library','math-1']).map(e=>e.id),['en-library'])
   assert.equal(wordPool('', ['en-pattern-1']).length,0)
 })
 test('every listening round offers three distinct words including its target', () => {
-  for (const entry of words) {
+  for (const entry of words.filter(entry=>hasWordAudio(entry.id))) {
     const round=buildWordRound(entry.id,'listen',()=>.4)
     assert.equal(round.choices.length,3)
     assert.equal(new Set(round.choices).size,3)
@@ -114,4 +114,35 @@ test('audio load failures show an error and a retry creates fresh playback', () 
   const failures=[]
   createLessonPlayer(()=>{throw new Error('unavailable')},s=>failures.push(s)).play('a')
   assert.equal(failures.at(-1).phase,'error')
+})
+
+test('textbook vocabulary is available by book and Module without invented audio', () => {
+  const upper = wordPool('',null,{book:'upper'})
+  const lower = wordPool('',null,{book:'lower'})
+  assert.equal(upper.length+lower.length,173)
+  assert.equal(wordPool('',null,{book:'base'}).length,288)
+  assert.ok(upper.every(entry=>entry.topic.startsWith('四上M')))
+  assert.ok(lower.every(entry=>entry.topic.startsWith('四下M')))
+  assert.equal(wordPool('四上M1 问路与方位',null,{book:'upper'}).length,10)
+  assert.equal(wordPool('四上M1 问路与方位',null,{book:'lower'}).length,0)
+  assert.equal(wordPool('',null,{book:'upper',mode:'listen'}).length,0)
+  assert.equal(wordPool('',null,{mode:'listen'}).length,288)
+  for (const entry of [...upper,...lower]) {
+    assert.equal(hasWordAudio(entry.id),false)
+    assert.throws(()=>buildWordRound(entry.id,'listen'),/暂无|尚无/)
+    const round = buildWordRound(entry.id,'meaning',()=>.2)
+    assert.equal(new Set(round.choices).size,3)
+    assert.ok(round.choices.includes(entry.id))
+    assert.ok(round.choices.every(id=>words.find(word=>word.id===id).topic===entry.topic))
+    assert.equal(buildWordRound(entry.id,'write').mode,'write')
+    assert.equal(inputResult(entry.id,entry.title).correct,true)
+  }
+})
+test('independent spelling accepts case and final punctuation but requires actual phrase boundaries', () => {
+  assert.equal(inputResult('en-apple','  APPLE! ').correct,true)
+  assert.equal(inputResult('en-next-to','next to').correct,true)
+  assert.equal(inputResult('en-next-to','nextto').correct,false)
+  assert.equal(inputResult('en-next-to','next   to').correct,true)
+  assert.equal(inputResult('en-apple','apple orange').correct,false)
+  assert.throws(()=>inputResult('no-word','apple'))
 })

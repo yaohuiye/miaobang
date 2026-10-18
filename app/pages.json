@@ -9,6 +9,7 @@
         { "path": "pages/games/light", "style": { "navigationBarTitleText": "光线救援站", "navigationBarBackgroundColor": "#f3f7fc" } },
         { "path": "pages/games/numbers", "style": { "navigationBarTitleText": "数字搭桥", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/games/safety", "style": { "navigationBarTitleText": "安全小侦探", "navigationBarBackgroundColor": "#f4f8ff" } },
+        { "path": "pages/growth/learning", "style": { "navigationBarTitleText": "我的探索成长", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/growth/index", "style": { "navigationBarTitleText": "成长小花园", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/games/english", "style": { "navigationBarTitleText": "英语游乐场", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/games/minesweeper", "style": { "navigationBarTitleText": "扫雷", "navigationBarBackgroundColor": "#f4f8ff" } },

@@ -3,7 +3,7 @@
     <text class="eyebrow">小妙的益智游乐场 · 找规律</text><text class="title">消消乐</text>
     <text class="intro">点两个上下左右相邻的水果交换位置，凑成三个一样就消掉。<br />连着消有加成分；没有能消的时候，水果盘会自己重新排一排。</text>
     <view class="level-strip"><button v-for="(item,i) in levels" :key="i" :disabled="i+1>progress.unlocked" :class="{active:level===i+1}" @click="chooseLevel(i+1)">{{ i+1>progress.unlocked ? '锁' : i+1 }}</button></view>
-    <text class="level-title">第 {{ level }} / 12 关 · {{ levels[level-1].name }} · 目标 {{ levels[level-1].target }} 分</text>
+    <text class="level-title">第 {{ level }} / 12 关 · {{ levels[level-1].name }} · {{ goalText }}</text>
     <text v-if="error" class="error">{{ error }}</text>
     <view class="row board-head">
       <text class="muted">得分 {{ score }}</text>
@@ -36,11 +36,12 @@
 import { createGrid, findMatches, swapped, resolveBoard, hasMoves, reshuffle, TILES, MATCH_COLS } from '@/game/match.mjs'
 import { arcadeStore } from '@/services/arcade.js'
 import { bestText } from '@/game/arcade-progress.mjs'
-import { MATCH_LEVELS, MATCH_LEVEL_KEY, readMatchLevels, unlockMatchLevel } from '@/game/match-levels.mjs'
+import { MATCH_LEVELS, MATCH_LEVEL_KEY, readMatchLevels, unlockMatchLevel, matchGoalReached, matchGoalText } from '@/game/match-levels.mjs'
 const TOTAL_MOVES = 18
 export default {
-  data() { return { levels:MATCH_LEVELS,progress:{version:1,unlocked:1},level:1,passed:false,grid: null, matchCols: MATCH_COLS, selected: null, score: 0, movesLeft: TOTAL_MOVES, finished: false, feedback: '', hint: '', best: '', error: '' } },
+  data() { return { levels:MATCH_LEVELS,progress:{version:1,unlocked:1},level:1,passed:false,collected:[0,0,0,0,0],grid: null, matchCols: MATCH_COLS, selected: null, score: 0, movesLeft: TOTAL_MOVES, finished: false, feedback: '', hint: '', best: '', error: '' } },
   computed: {
+    goalText(){return matchGoalText(this.levels[this.level-1],this.collected)},
     flatCells() { return this.grid ? this.grid.flat().map(kind => TILES[kind]) : Array.from({ length: 64 }, () => '❔') }
   },
   onLoad() { this.readBest();try{this.progress=readMatchLevels(uni.getStorageSync(MATCH_LEVEL_KEY));this.level=this.progress.unlocked}catch(e){this.error=e.message} },
@@ -57,6 +58,7 @@ export default {
       this.score = 0
       this.movesLeft = this.levels[this.level-1].moves
       this.passed=false
+      this.collected=[0,0,0,0,0]
       this.finished = false
       this.feedback = ''
       this.hint = ''
@@ -77,6 +79,7 @@ export default {
         }
         const resolved = resolveBoard(after, Math.random)
         this.grid = resolved.grid
+        this.collected=this.collected.map((n,i)=>n+resolved.collected[i])
         this.score += resolved.cleared * 10 + (resolved.cascades - 1) * 20
         this.movesLeft -= 1
         this.selected = null
@@ -84,7 +87,7 @@ export default {
           this.grid = reshuffle(this.grid, Math.random)
           this.feedback = '没有能消的排列了，水果盘重新排了排，继续！'
         }
-        if (this.score>=this.levels[this.level-1].target||!this.movesLeft) this.finish()
+        if (matchGoalReached(this.levels[this.level-1],this.score,this.collected)||!this.movesLeft) this.finish()
       } catch (error) { this.feedback = error.message }
     },
     showHint() {
@@ -107,7 +110,7 @@ export default {
     },
     finish() {
       this.finished = true
-      this.passed=this.score>=this.levels[this.level-1].target
+      this.passed=matchGoalReached(this.levels[this.level-1],this.score,this.collected)
       try { arcadeStore.save('match', this.score, Date.now()); this.readBest(); this.error = '' }
       catch (error) { this.error = '这次成绩没能保存：' + error.message }
       if(this.passed){try{this.saveProgress()}catch(e){this.error='关卡进度没能保存：'+e.message}}

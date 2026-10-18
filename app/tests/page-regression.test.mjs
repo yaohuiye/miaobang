@@ -11,6 +11,7 @@ import * as jump from '../game/jump.mjs'
 import * as match from '../game/match.mjs'
 import * as matchLevels from '../game/match-levels.mjs'
 import * as lab from '../lab/experiments.mjs'
+import * as skillChallenges from '../game/skill-challenges.mjs'
 
 // Execute actual page methods with fake storage and time; no real intervals or phone are needed.
 function loadPage(name, bindings) {
@@ -21,6 +22,7 @@ function loadPage(name, bindings) {
   let nextId = 0
   const timers = new Map()
   const page = runInNewContext(`${script}\npage`, {
+    ...skillChallenges,
     ...bindings,
     Math: Object.assign(Object.create(Math), { random: () => .314 }),
     arcadeStore: { read: () => ({ version: 1, best: {} }), save: () => {} },
@@ -41,6 +43,7 @@ function loadPage(name, bindings) {
 test('flag mode marks and unmarks a real mine without revealing or losing', () => {
   const { state } = loadPage('games/minesweeper', mines)
   state.board = mines.createBoard(() => .314, 0, 0)
+  state.boardCols = state.board.cols
   const index = state.board.cells.findIndex(cell => cell.mine)
   const row = Math.floor(index / state.boardCols)
   const col = index % state.boardCols
