@@ -2,6 +2,7 @@
 	"pages": [
         { "path": "pages/home/index", "style": { "navigationBarTitleText": "妙帮", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/lab/index", "style": { "navigationBarTitleText": "好奇实验室", "navigationBarBackgroundColor": "#f1f7f5" } },
+        { "path": "pages/games/gomoku", "style": { "navigationBarTitleText": "五子棋小课堂", "navigationBarBackgroundColor": "#f5f8f6" } },
         { "path": "pages/games/jump", "style": { "navigationBarTitleText": "跳一跳", "navigationBarBackgroundColor": "#f4f8ff" } },
         { "path": "pages/games/plane", "style": { "navigationBarTitleText": "纸翼飞行队", "navigationBarBackgroundColor": "#f0f5f6" } },
 

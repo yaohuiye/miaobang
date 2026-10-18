@@ -24,6 +24,7 @@ export default {
       {name:'安全小侦探',copy:'一起发现安全的办法',icon:'safety',url:'/pages/games/safety'},
       {name:'听音找词',copy:'听一听，找英文词',icon:'sound',url:'/pages/games/english?mode=listen'},
       {name:'拼词小工坊',copy:'把字母拼成一个词',icon:'spell',url:'/pages/games/english?mode=spell'},
+      {name:'五子棋小课堂',copy:'看懂棋形，练会攻防',icon:'gomoku',url:'/pages/games/gomoku'},
       {name:'扫雷',copy:'看数字，安全排雷',icon:'mines',url:'/pages/games/minesweeper'},
       {name:'俄罗斯方块',copy:'转一转，填满一行',icon:'tetris',url:'/pages/games/tetris'},
       {name:'消消乐',copy:'12 关果园探险',icon:'match',url:'/pages/games/match'},

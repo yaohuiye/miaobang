@@ -49,6 +49,11 @@ def draw_icon(name):
         poly([(48,18),(54,39),(74,55),(74,61),(54,56),(54,68),(63,75),(48,71),(33,75),(42,68),(42,56),(22,61),(22,55),(42,39)],BLUE);line([(48,34),(48,57)]);line([(29,24),(29,31)],'#81b4a5',2.5);line([(69,21),(69,29)],'#81b4a5',2.5)
     elif name=='jump':
         box((18,65,40,79),MINT,5);box((60,52,82,79),GOLD,5);box((36,26,56,42),BLUE,5);circle(42,33,2,INK,None);circle(50,33,2,INK,None);box((39,42,53,52),GOLD,3);arc((28,21,73,66),195,325,INK,2);line([(66,23),(74,23),(73,31)],width=2)
+    elif name=='gomoku':
+        box((22,22,74,74),'#f6e7cd',7)
+        for v in [34,48,62]:
+            line([(v,28),(v,68)],'#aab9b3',1.5);line([(28,v),(68,v)],'#aab9b3',1.5)
+        circle(34,34,6,INK,None);circle(48,48,6,'#f8fbff',INK,2);circle(62,62,6,INK,None);circle(34,62,6,'#f8fbff',INK,2)
     elif name=='snake':
         line([(29,72),(58,72),(65,63),(65,51),(32,51),(27,42),(27,31),(42,27)],INK,17);line([(29,72),(58,72),(65,63),(65,51),(32,51),(27,42),(27,31),(42,27)],MINT,11);box((37,18,60,36),MINT,9);circle(53,24,2,INK,None);line([(60,29),(67,29)],ROSE,2);circle(73,70,7,ROSE);line([(73,62),(76,57)],width=2)
     elif name=='clock':
@@ -87,7 +92,7 @@ def draw_icon(name):
     else:raise ValueError(name)
     return im.resize((192,192),Image.Resampling.LANCZOS)
 
-NAMES = ['clock','flower','lab','puzzle','light','numbers','safety','sound','spell','mines','tetris','match','plane','snake','jump'] + ['lab-'+s for s in ['shadow','float','circuit','materials','poles','sound','ramp','friction','parachute','lever','color','pressure','moon']]
+NAMES = ['clock','flower','lab','puzzle','light','numbers','safety','sound','spell','mines','tetris','match','plane','snake','jump','gomoku'] + ['lab-'+s for s in ['shadow','float','circuit','materials','poles','sound','ramp','friction','parachute','lever','color','pressure','moon']]
 if __name__ == '__main__':
     OUT.mkdir(parents=True,exist_ok=True)
     for name in NAMES:draw_icon(name).save(OUT/(name+'.png'),optimize=True)

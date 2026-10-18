@@ -12,6 +12,7 @@ export const LEARNING_MILESTONES=[
  {id:'lab-one',domain:'lab',label:'带着问题动手',detail:'独立完成 1 项实验任务',metric:'completed',target:1},
  {id:'lab-four',domain:'lab',label:'证据收集员',detail:'独立完成 4 项实验任务',metric:'completed',target:4},
  {id:'lab-nine',domain:'lab',label:'发现新规律',detail:'独立完成 9 项实验任务',metric:'completed',target:9},
+ ...[2,8,16].map((target,i)=>({id:'gomoku-'+target,domain:'gomoku',label:['落子有想法','攻防小能手','棋形小侦探'][i],detail:'独立完成 '+target+' 道五子棋训练',metric:'independent',target})),
  ...['mines','jump'].flatMap(domain=>[1,2,3].map(target=>({id:domain+'-'+target,domain,label:domain==='mines'?['数字初探','排雷进阶','推理挑战'][target-1]:['小岛初探','距离巧手','精准飞跃'][target-1],detail:'通过 '+target+' 个不同难度',metric:'completed',target})))
 ]
 export const LEARNING_DOMAINS=[
@@ -20,6 +21,7 @@ export const LEARNING_DOMAINS=[
  {id:'safety',title:'安全判断',icon:'safety',url:'/pages/games/safety',copy:'发现危险、选择行动、再想一步'},
  {id:'lab',title:'科学发现',icon:'lab',url:'/pages/lab/index',copy:'先猜、留下对照证据，再解决新问题'},
  {id:'mines',title:'扫雷推理',icon:'mines',url:'/pages/games/minesweeper',copy:'不同棋盘与雷密度，慢慢看懂数字'},
+ {id:'gomoku',title:'五子棋思考',icon:'gomoku',url:'/pages/games/gomoku',copy:'看懂棋形，先找自己的赢点，再看对方威胁'},
  {id:'jump',title:'跳跃节奏',icon:'jump',url:'/pages/games/jump',copy:'观察距离，再调整蓄力和落点'}
 ]
 export const EXPLORER_BADGES_KEY='miaobang.learning-badges.v1'
