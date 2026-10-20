@@ -21,14 +21,14 @@ const testPuzzle = (objective, black, white, toPlay = 1) => ({
 
 test('eight short lessons use family freestyle terms and stable distinct puzzle IDs', () => {
   assert.equal(lessons.length, 8)
-  assert.equal(puzzles.length, 16)
+  assert.equal(puzzles.length, 160)
   assert.equal(new Set(lessons.map(lesson => lesson.id)).size, lessons.length)
   assert.equal(new Set(puzzles.map(puzzle => puzzle.id)).size, puzzles.length)
   assert.match(GOMOKU_RULES.description, /五颗及以上/)
   assert.match(GOMOKU_RULES.description, /不设禁手/)
   for (const lesson of lessons) {
     for (const field of ['title', 'subtitle', 'observe', 'formula', 'mistake', 'explanation']) assert.ok(lesson[field])
-    assert.equal(lesson.puzzleIds.length, 2)
+    assert.equal(lesson.puzzleIds.length, ({'five-line':8,'one-move-win':16,'stop-five':24,'rush-four':24,'open-four':16,'straight-three':16,'attack-defense':24,'double-threat':32})[lesson.id])
     for (const id of lesson.puzzleIds) assert.equal(puzzleById[id].lessonId, lesson.id)
   }
   assert.match(lessons.find(lesson => lesson.id === 'straight-three').mistake, /跳三/)
@@ -45,9 +45,9 @@ test('every puzzle is a legal nonterminal turn with at least one engine-verified
     assert.equal(black - white, puzzle.toPlay === 1 ? 0 : 1, puzzle.id)
     assert.ok(puzzle.stones.every(stone => !winningLine(board, stone.row, stone.col).length), puzzle.id)
     const own = winningMoves(board, puzzle.toPlay), enemy = winningMoves(board, 3 - puzzle.toPlay)
-    assert.ok(!(own.length && enemy.length), puzzle.id + ' must not ask two players to ignore an immediate win')
+    if (puzzle.objective !== 'win') assert.equal(own.length, 0, puzzle.id + ' must exercise its stated shape rather than accept an unrelated immediate win')
     if (['block', 'attack-defense'].includes(puzzle.objective)) assert.equal(enemy.length, 1, puzzle.id)
-    else assert.equal(enemy.length, 0, puzzle.id)
+    else if (puzzle.objective !== 'win') assert.equal(enemy.length, 0, puzzle.id)
     const moves = answers(puzzle)
     assert.ok(moves.length > 0, puzzle.id)
     assert.ok(moves.length < 81 - puzzle.stones.length, puzzle.id)
@@ -111,8 +111,8 @@ test('hint, revealed answer or a wrong move grants practice but a fresh independ
   assert.equal(helpedResult.independent, false)
   let state = recordGomokuPuzzle('', id, { independent: helpedResult.independent })
   assert.deepEqual(summarizeGomokuLearning(state), {
-    practiced: 1, independent: 0, total: 16,
-    byLesson: Object.fromEntries(lessons.map(lesson => [lesson.id, { practiced: lesson.id === 'five-line' ? 1 : 0, independent: 0, total: 2 }]))
+    practiced: 1, independent: 0, total: puzzles.length,
+    byLesson: Object.fromEntries(lessons.map(lesson => [lesson.id, { practiced: lesson.id === 'five-line' ? 1 : 0, independent: 0, total: lesson.puzzleIds.length }]))
   })
   const wrong = createGomokuAttempt(id)
   assert.equal(wrong.tryMove(1, 1).correct, false)
@@ -172,4 +172,83 @@ test('a write that persisted before reporting failure can be retried without dup
   assert.throws(() => store.save('five-line-row', { independent: true }), /interrupted/)
   assert.equal(store.save('five-line-row', { independent: true }).independent.length, 1)
   assert.equal(writes, 1)
+})
+
+
+// Normalize translation, reflection, rotation and color. Balancing stones are not teaching differences.
+const canonicalPosition = (stones, allowSwap = true) => {
+  const variants = []
+  for (let mirror = 0; mirror < 2; mirror++) for (let turns = 0; turns < 4; turns++) for (let swap = 0; swap < (allowSwap ? 2 : 1); swap++) {
+    const points = stones.map(stone => {
+      let r = stone.row, c = mirror ? -stone.col : stone.col
+      for (let turn = 0; turn < turns; turn++) [r, c] = [c, -r]
+      return [r, c, swap ? 3 - stone.player : stone.player]
+    })
+    const minR = Math.min(...points.map(point => point[0])), minC = Math.min(...points.map(point => point[1]))
+    variants.push(points.map(([r, c, player]) => `${r - minR},${c - minC},${player}`).sort().join(';'))
+  }
+  return variants.sort()[0]
+}
+
+test('the expanded bank keeps the original sixteen stable IDs and supplies difficulty and actual skill labels', () => {
+  assert.deepEqual(puzzles.slice(0, 16).map(puzzle => puzzle.id), [
+    'five-line-row', 'five-line-column-gap', 'one-move-win-diagonal-gap', 'one-move-win-antidiagonal',
+    'stop-five-row', 'stop-five-column', 'rush-four-row', 'rush-four-column', 'open-four-row', 'open-four-diagonal',
+    'straight-three-row', 'straight-three-column', 'attack-defense-cross', 'attack-defense-diagonal', 'double-threat-cross', 'double-threat-diagonals'
+  ])
+  for (const puzzle of puzzles) {
+    assert.ok(['observe', 'apply', 'challenge'].includes(puzzle.difficulty), puzzle.id)
+    for (const field of ['title', 'skill', 'prompt', 'hint', 'explanation']) assert.equal(typeof puzzle[field], 'string', `${puzzle.id} ${field}`)
+    assert.ok(puzzle.skill.length > 0, puzzle.id)
+  }
+  const old = { version: 1, practiced: puzzles.slice(0, 16).map(puzzle => puzzle.id), independent: puzzles.slice(0, 16).map(puzzle => puzzle.id) }
+  assert.deepEqual(readGomokuLearning(old), old)
+  assert.equal(summarizeGomokuLearning(old).independent, 16)
+  assert.equal(summarizeGomokuLearning(old).total, 160)
+})
+
+test('144 added study layouts exclude balancing stones and do not count moved copies of a target and its contrast as new questions', () => {
+  const added = puzzles.slice(16)
+  const layouts = new Set(added.map(puzzle => canonicalPosition(puzzle.stones.filter(stone => !stone.setup))))
+  assert.equal(layouts.size, 144)
+  const primary = new Set(added.map(puzzle => canonicalPosition(puzzle.stones.filter(stone => !stone.setup && !stone.contrast))))
+  // Several layouts intentionally contrast one skill with different real threats; they are not 144 different tactics.
+  assert.ok(primary.size >= 70, `only ${primary.size} target/constraint skeletons`)
+  const contrasts = added.filter(puzzle => puzzle.stones.some(stone => stone.contrast)).map(puzzle =>
+    canonicalPosition(puzzle.stones.filter(stone => !stone.setup && !stone.contrast), false) + '|' +
+    canonicalPosition(puzzle.stones.filter(stone => stone.contrast), false))
+  assert.equal(new Set(contrasts).size, contrasts.length, 'moving the same distractor relative to the same target does not create new practice')
+})
+
+test('every optional constraint changes the available answers or an actual following winning point', () => {
+  const signature = puzzle => {
+    const board = makePuzzleBoard(puzzle)
+    return answers(puzzle).map(move => `${move.row},${move.col}:` +
+      winningMoves(placeStone(board, move.row, move.col, puzzle.toPlay), puzzle.toPlay)
+        .map(point => `${point.row},${point.col}`).sort().join('|')).sort().join(';')
+  }
+  let checked = 0
+  for (const puzzle of puzzles.slice(16)) for (const stone of puzzle.stones.filter(stone => stone.constraint)) {
+    const without = { ...puzzle, stones: puzzle.stones.filter(value => value !== stone) }
+    assert.notEqual(signature(puzzle), signature(without), `${puzzle.id} constraint ${stone.row},${stone.col} changes no decision`)
+    checked++
+  }
+  assert.ok(checked >= 10)
+})
+
+test('priority examples accept a real immediate win despite an opponent four, and crossing puzzles vary the key point', () => {
+  const priorities = puzzles.slice(16).filter(puzzle => puzzle.objective === 'win' && winningMoves(makePuzzleBoard(puzzle), 3 - puzzle.toPlay).length)
+  assert.ok(priorities.length >= 3)
+  for (const puzzle of priorities) for (const answer of answers(puzzle)) {
+    const next = placeStone(makePuzzleBoard(puzzle), answer.row, answer.col, puzzle.toPlay)
+    assert.ok(winningLine(next, answer.row, answer.col).length >= 5)
+  }
+  const crossing = puzzles.slice(16).filter(puzzle => ['attack-defense', 'fork'].includes(puzzle.objective))
+  const frequencies = new Map()
+  for (const puzzle of crossing) for (const move of answers(puzzle)) {
+    const key = `${move.row},${move.col}`
+    frequencies.set(key, (frequencies.get(key) || 0) + 1)
+  }
+  assert.ok(frequencies.size >= 20, `only ${frequencies.size} key positions`)
+  assert.ok(Math.max(...frequencies.values()) <= 8, 'the same intersection must not solve the entire chapter')
 })

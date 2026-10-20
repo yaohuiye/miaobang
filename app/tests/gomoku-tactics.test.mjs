@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { winningLine, winningMoves, placeStone } from '../game/gomoku.mjs'
+import { emptyBoard, winningLine, winningMoves, placeStone } from '../game/gomoku.mjs'
 import { tacticalPuzzles, createTacticalAttempt, playTacticalMove, tacticalHint, markTacticalHelp } from '../game/gomoku-tactics.mjs'
 
 const same = (a,b) => a.row === b.row && a.col === b.col
@@ -32,11 +32,12 @@ function verifyEveryReply(state, turnsLeft, counters) {
   }
 }
 
-test('six original positions are legal, nonterminal and have no one-move child win', () => {
-  assert.ok(tacticalPuzzles.length >= 6)
+test('all 48 positions are legal, nonterminal and have no one-move child win', () => {
+  assert.ok(tacticalPuzzles.length >= 48)
   assert.equal(new Set(tacticalPuzzles.map(p => p.id)).size,tacticalPuzzles.length)
   for (const puzzle of tacticalPuzzles) {
-    for (const key of ['title','topic','goal','prompt','hint']) assert.ok(puzzle[key]?.length > 0)
+    assert.ok(['observe','apply','challenge'].includes(puzzle.difficulty))
+    for (const key of ['title','topic','goal','prompt','hint','skill']) assert.ok(puzzle[key]?.length > 0)
     for (const key of ['idea','trap','reflection']) assert.ok(puzzle.teaching[key]?.length > 0)
     const state = createTacticalAttempt(puzzle.id)
     const black = state.board.flat().filter(stone => stone === 1).length
@@ -49,16 +50,16 @@ test('six original positions are legal, nonterminal and have no one-move child w
   }
 })
 
-test('every legal defender response to all four reference attacks still permits real five', () => {
+test('every legal defender response to every reference attack still permits real five', () => {
   const counters = {replies:0,forcedBlocks:0}
   for (const puzzle of tacticalPuzzles.filter(p => p.kind === 'attack')) {
     verifyEveryReply(createTacticalAttempt(puzzle.id),puzzle.maxTurns,counters)
   }
-  assert.ok(counters.replies > 500,`only ${counters.replies} defender replies checked`)
-  assert.ok(counters.forcedBlocks >= 5)
+  assert.ok(counters.replies > 5000,`only ${counters.replies} defender replies checked`)
+  assert.ok(counters.forcedBlocks >= 60)
 })
 
-test('all six tasks require multiple decisions and real opponent stones', () => {
+test('all 48 tasks require multiple decisions and real opponent stones', () => {
   for (const puzzle of tacticalPuzzles) {
     let state = createTacticalAttempt(puzzle.id)
     const snapshots = []
@@ -192,4 +193,72 @@ test('hints, help markers, illegal clicks and valid turns preserve input snapsho
   assert.equal(JSON.stringify(state),json)
   assert.deepEqual(JSON.parse(JSON.stringify(next)),next)
   assert.deepEqual(playTacticalMove(JSON.parse(JSON.stringify(helped)),hint.row,hint.col),next)
+})
+
+
+// Ignore irrelevant turn-balancing white stones and even ignore all defender
+// geometry. A stricter attacker-only signature still distinguishes the 42 new
+// cores after translation, rotation, reflection, and swapping playing colors.
+function coreSignature(puzzle) {
+  const stones = puzzle.stones.filter(stone => stone.player === puzzle.toPlay)
+  return Array.from({length:8},(_,transform) => {
+    const positions = stones.map(stone => {
+      let row = stone.row, col = stone.col
+      if (transform >= 4) col = -col
+      for (let turns = 0; turns < transform%4; turns++) [row,col] = [col,-row]
+      return [row,col]
+    })
+    const rowMin = Math.min(...positions.map(point => point[0]))
+    const colMin = Math.min(...positions.map(point => point[1]))
+    return positions.map(([row,col]) => `${row-rowMin},${col-colMin}`).sort().join(';')
+  }).sort()[0]
+}
+
+// Independent bounded continuous-four verifier. Unlike the production hint
+// finder it enumerates ALL vacant attacking points; it is used only in tests.
+function hasForcingWin(board, player, turns, memo = new Map()) {
+  if (winningMoves(board,player).length) return true
+  if (turns < 2) return false
+  const key = `${turns}/${board.flat().join('')}`
+  if (memo.has(key)) return memo.get(key)
+  const opponent = 3-player, danger = winningMoves(board,opponent)
+  if (danger.length > 1) return false
+  const candidates = danger.length ? danger : vacancies(board)
+  for (const move of candidates) {
+    const after = placeStone(board,move.row,move.col,player)
+    if (winningMoves(after,opponent).length) continue
+    const threats = winningMoves(after,player)
+    if (threats.length > 1 || threats.length === 1 && hasForcingWin(placeStone(after,threats[0].row,threats[0].col,opponent),player,turns-1,memo)) {
+      memo.set(key,true)
+      return true
+    }
+  }
+  memo.set(key,false)
+  return false
+}
+
+test('42 added attacks have genuinely different cores, not transformed boards or irrelevant added attacking stones', () => {
+  const added = tacticalPuzzles.filter(puzzle => puzzle.id.startsWith('relay-'))
+  assert.equal(added.length,42)
+  assert.equal(new Set(added.map(coreSignature)).size,42)
+  const old = tacticalPuzzles.filter(puzzle => !puzzle.id.startsWith('relay-') && puzzle.kind === 'attack')
+  const oldSignatures = new Set(old.map(coreSignature))
+  for (const puzzle of added) {
+    assert.equal(oldSignatures.has(coreSignature(puzzle)),false,`${puzzle.id}: transformed old core`)
+    assert.ok(puzzle.coreStones.every(stone => puzzle.stones.some(other => other.row === stone.row && other.col === stone.col && other.player === stone.player)))
+    const state = createTacticalAttempt(puzzle.id)
+    for (const stone of puzzle.stones.filter(stone => stone.player === puzzle.toPlay)) {
+      const reduced = state.board.map((line,row) => line.map((value,col) => row === stone.row && col === stone.col ? 0 : value))
+      assert.equal(hasForcingWin(reduced,puzzle.toPlay,puzzle.maxTurns),false,`${puzzle.id}: ${stone.row},${stone.col} was irrelevant padding`)
+    }
+    // Turn-balancing white stones do not create the learning target.
+    let core = emptyBoard(puzzle.size)
+    for (const stone of puzzle.coreStones) core = placeStone(core,stone.row,stone.col,stone.player)
+    assert.equal(hasForcingWin(core,puzzle.toPlay,puzzle.maxTurns),true,`${puzzle.id}: target depends on remote filler`)
+  }
+  assert.equal(added.filter(puzzle => puzzle.maxTurns === 3).length,24)
+  assert.equal(added.filter(puzzle => puzzle.maxTurns === 4).length,18)
+  assert.ok(tacticalPuzzles.filter(puzzle => puzzle.difficulty === 'observe').length >= 10)
+  assert.ok(tacticalPuzzles.filter(puzzle => puzzle.difficulty === 'apply').length >= 16)
+  assert.ok(tacticalPuzzles.filter(puzzle => puzzle.difficulty === 'challenge').length >= 18)
 })

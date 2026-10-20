@@ -1,3 +1,5 @@
+import { additionalPuzzles } from './gomoku-bank.mjs'
+
 // Original short lessons and board positions for this app's family freestyle rules.
 // These rules allow five or more in a row and have no forbidden moves.
 export const GOMOKU_RULES = {
@@ -89,7 +91,7 @@ const puzzle = (id, lessonId, title, toPlay, objective, black, white, hint, expl
   hint, explanation, stones: stones(black, white)
 })
 
-export const puzzles = [
+const foundationPuzzles = [
   puzzle('five-line-row', 'five-line', '横着数到五', 1, 'win',
     [[4, 2], [4, 3], [4, 4], [4, 5]], [[0, 0], [0, 2], [2, 0], [8, 8]],
     '看中间那一排黑棋。两头的空位都值得试一试。', '四颗已经横着相连，在任意一个可用的端点添一颗就成五。'),
@@ -140,4 +142,16 @@ export const puzzles = [
     '让两条白棋斜线在同一个空位相接，再各找一个成五点。', '两条不同方向的四各有成五点。家庭自由规则允许这一手；判断时仍先看对手有没有更快的赢法。')
 ]
 
+const foundationLevels = {
+  'five-line': ['observe', '五连辨认'], 'one-move-win': ['apply', '一步成五'],
+  'stop-five': ['apply', '紧急防守'], 'rush-four': ['apply', '冲四缺口'],
+  'open-four': ['apply', '活四两端'], 'straight-three': ['apply', '活三空间'],
+  'attack-defense': ['challenge', '一子攻防'], 'double-threat': ['challenge', '双向四威胁']
+}
+export const puzzles = [
+  ...foundationPuzzles.map(item => ({ ...item, difficulty: foundationLevels[item.lessonId][0], skill: foundationLevels[item.lessonId][1] })),
+  ...additionalPuzzles
+]
+// Keep the original IDs and order, and include every new practice in its existing lesson.
+for (const lesson of lessons) lesson.puzzleIds = puzzles.filter(item => item.lessonId === lesson.id).map(item => item.id)
 export const puzzleById = Object.fromEntries(puzzles.map(item => [item.id, item]))

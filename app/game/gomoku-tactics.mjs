@@ -1,4 +1,5 @@
 import { emptyBoard, placeStone, winningLine, chooseGomokuMove } from './gomoku.mjs'
+import { tacticalBank } from '../data/gomoku-tactics-bank.mjs'
 
 const point = (row, col, player) => ({row,col,player})
 const stones = (black, white) => [...black.map(([r,c]) => point(r,c,1)), ...white.map(([r,c]) => point(r,c,2))]
@@ -13,7 +14,7 @@ const attack = (id, title, topic, black, white, teaching, maxTurns = 3) => ({
 
 // These are original local positions, not extracted full-game records. All use the
 // app's freestyle rules (five or more wins, no forbidden moves).
-export const tacticalPuzzles = [
+const starterPuzzles = [
   attack('turn-the-corner','冲四以后，向哪里转？','横线逼防 → 竖线接力',
     [[4,2],[4,3],[4,4],[2,5],[3,5]], [[4,1],...quietWhite],
     {idea:'冲四的价值还在于让对手必须应手。第一颗进攻棋要同时接上另一条线。',trap:'只盯着横线上再加棋，会看不到被挡之后的竖向机会。',reflection:'对手每次为什么不能去别处下？哪一颗棋同时参加了两个方向？'}),
@@ -44,6 +45,19 @@ export const tacticalPuzzles = [
     defenseLine:{start:{row:2,col:2},dr:1,dc:1,length:3},
     teaching:{idea:'棋形换了方向，算路的方法不变：找威胁、想回应、再检查下一手。',trap:'斜线上的空位不醒目，容易误以为离得远；需要沿同一方向逐格数。',reflection:'这道题与横向题相同的地方是什么？如果白棋从另一端伸长，你还会防吗？'}
   }
+]
+
+const starterSkills = {
+  'turn-the-corner':['observe','冲四转向'],
+  'leave-the-gap':['apply','跳冲四转向'],
+  'three-directions':['challenge','两次转向'],
+  'defend-with-tempo':['apply','防守夺先'],
+  'stop-the-live-three':['observe','连续防活三'],
+  'stop-the-diagonal':['observe','斜线连续防守']
+}
+export const tacticalPuzzles = [
+  ...starterPuzzles.map(puzzle => ({...puzzle,difficulty:starterSkills[puzzle.id][0],skill:starterSkills[puzzle.id][1]})),
+  ...tacticalBank
 ]
 
 const puzzleById = Object.fromEntries(tacticalPuzzles.map(puzzle => [puzzle.id,puzzle]))

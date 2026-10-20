@@ -44,6 +44,9 @@
 
 ### 连续攻防与完整研究
 
-`game/gomoku-tactics.mjs` 提供 6 段多轮训练与有界连续冲四验证；`game/gomoku-tactics-progress.mjs` 和 `services/gomoku-tactics.js` 将整段完成保存到 `miaobang.gomoku-tactics.v1`。旧单步键不迁移；提示、试错、回退后本轮只记练习通过。页面保存失败保留终局与待保存状态。
+`game/gomoku-tactics.mjs` 提供 48 段多轮训练与有界连续冲四验证；`game/gomoku-tactics-progress.mjs` 和 `services/gomoku-tactics.js` 将整段完成保存到 `miaobang.gomoku-tactics.v1`。旧单步键不迁移；提示、试错、回退后本轮只记练习通过。页面保存失败保留终局与待保存状态。
 
 `lab/inquiries.mjs` 包含 4 项研究、纯状态推进、证据判定及 `miaobang.lab-inquiries.v1` 报告存储。页面仅在显式记录后展示当前结果，新条件锁预测后仍需实际验证；数值从原实验模型重新计算，不相信提供的结果。旧自由实验、笔记和九项任务独立保留。
+
+
+题库扩充使用 `data/gomoku-bank.mjs`（144 新增单步布局）与 `data/gomoku-tactics-bank.mjs`（42 新增连续局面）。旧题直接保留，读取与汇总仍以稳定 ID 识别，不重置本机记录。筛选、分页只作用于当前展示列表，题目判定继续使用完整棋盘。公开源版本 1.1.2 / 112。
