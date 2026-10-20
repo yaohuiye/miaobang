@@ -7,7 +7,7 @@
     <button class="growth-entry" @click="navigate('/pages/growth/learning')"><image src="/static/ui/activities/puzzle.png" mode="aspectFit"/><view><text class="entry-title">我的探索成长</text><text class="entry-description">看看徽章和下一项挑战</text></view><text class="arrow">→</text></button>
     <button class="growth-entry" @click="navigate('/pages/growth/index')"><image src="/static/ui/activities/flower.png" mode="aspectFit" /><view><text class="entry-title">成长小花园</text><text class="entry-description">记一件小事，留一朵鼓励花</text></view><text class="arrow">→</text></button>
     <button class="oral-entry" @click="navigate('/pages/learning/oral-daily')"><image src="/static/ui/activities/numbers.png" mode="aspectFit" /><view><text class="entry-title">每日口算打卡</text><text class="entry-description">20 道四年级口算题，今天的一组做完了吗</text></view><text class="arrow">→</text></button>
-    <button class="lab-entry" @click="navigate('/pages/lab/index')"><image class="lab-icon" src="/static/ui/activities/lab.png" mode="aspectFit" /><view><text class="entry-title">好奇实验室</text><text class="entry-description">13 个实验，先猜猜，再发现</text></view><text class="arrow">→</text></button>
+    <button class="lab-entry" @click="navigate('/pages/lab/index')"><image class="lab-icon" src="/static/ui/activities/lab.png" mode="aspectFit" /><view><text class="entry-title">好奇实验室</text><text class="entry-description">自己做对照，用证据解释发现</text></view><text class="arrow">→</text></button>
     <view class="section-heading"><text>选一个游戏</text><text class="muted">一起玩，慢慢想</text></view>
     <view class="game-grid"><button v-for="game in games" :key="game.url" :class="['game-card',{night:game.icon==='light'}]" @click="navigate(game.url)"><image :src="'/static/ui/activities/'+game.icon+'.png'" mode="aspectFit" /><text class="game-name">{{ game.name }}</text><text class="game-copy">{{ game.copy }}</text><text class="game-arrow">↗</text></button></view>
     <text class="muted footer">游戏随时可以玩。<br />查知识、看记录，都在下方导航里。</text>
@@ -24,7 +24,7 @@ export default {
       {name:'安全小侦探',copy:'一起发现安全的办法',icon:'safety',url:'/pages/games/safety'},
       {name:'听音找词',copy:'听一听，找英文词',icon:'sound',url:'/pages/games/english?mode=listen'},
       {name:'拼词小工坊',copy:'把字母拼成一个词',icon:'spell',url:'/pages/games/english?mode=spell'},
-      {name:'五子棋小课堂',copy:'看懂棋形，练会攻防',icon:'gomoku',url:'/pages/games/gomoku'},
+      {name:'五子棋训练营',copy:'看对手回应，练连续攻防',icon:'gomoku',url:'/pages/games/gomoku'},
       {name:'扫雷',copy:'看数字，安全排雷',icon:'mines',url:'/pages/games/minesweeper'},
       {name:'俄罗斯方块',copy:'转一转，填满一行',icon:'tetris',url:'/pages/games/tetris'},
       {name:'消消乐',copy:'12 关果园探险',icon:'match',url:'/pages/games/match'},

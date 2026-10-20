@@ -11,6 +11,7 @@ import * as jump from '../game/jump.mjs'
 import * as match from '../game/match.mjs'
 import * as matchLevels from '../game/match-levels.mjs'
 import * as lab from '../lab/experiments.mjs'
+import * as inquiries from '../lab/inquiries.mjs'
 import * as skillChallenges from '../game/skill-challenges.mjs'
 
 // Execute actual page methods with fake storage and time; no real intervals or phone are needed.
@@ -141,7 +142,7 @@ test('plane page pauses on hide and resumes without resetting the mission or acc
   page.hide()
 })
 test('lab page stops its experiment animation and sound when hidden', () => {
-  const page = loadPage('lab/index', lab)
+  const page = loadPage('lab/index', {...lab,...inquiries})
   page.state.selected = lab.EXPERIMENTS.find(e => e.id === 'ramp')
   page.state.params = lab.defaults(page.state.selected)
   page.state.result = lab.observe('ramp', page.state.params)

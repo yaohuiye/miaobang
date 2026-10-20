@@ -40,3 +40,10 @@
 `game/gomoku.mjs` 是无 uni 依赖的自由规则/局部评分陪练；`data/gomoku-lessons.mjs` 提供原创短课与局面；`game/gomoku-learning.mjs` 按真实局面判定并保存 `miaobang.gomoku-learning.v1`（练习/独立完成集合）。`pages/games/gomoku.vue` 提供教学、训练与本地对弈，隐藏时取消陪练定时器，返回后手动继续。9×9 训练支持多解，15×15 对弈使用预选再确认，避免小屏误落。
 
 成长追加 3 枚五子棋徽章，总数 21、上限 420 点；原 0/40/100/200/360 等级阈值保持，旧徽章完整保留。独立训练 2/8/16 题各得一次徽章，重复对弈或同题练习不刷经验。
+
+
+### 连续攻防与完整研究
+
+`game/gomoku-tactics.mjs` 提供 6 段多轮训练与有界连续冲四验证；`game/gomoku-tactics-progress.mjs` 和 `services/gomoku-tactics.js` 将整段完成保存到 `miaobang.gomoku-tactics.v1`。旧单步键不迁移；提示、试错、回退后本轮只记练习通过。页面保存失败保留终局与待保存状态。
+
+`lab/inquiries.mjs` 包含 4 项研究、纯状态推进、证据判定及 `miaobang.lab-inquiries.v1` 报告存储。页面仅在显式记录后展示当前结果，新条件锁预测后仍需实际验证；数值从原实验模型重新计算，不相信提供的结果。旧自由实验、笔记和九项任务独立保留。

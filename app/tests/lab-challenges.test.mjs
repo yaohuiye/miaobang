@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs'
 import { runInNewContext } from 'node:vm'
 import * as lab from '../lab/experiments.mjs'
 import * as tasks from '../lab/challenges.mjs'
+import * as inquiries from '../lab/inquiries.mjs'
 const samples = {
   'shadow-1':[{distance:25}], 'shadow-2':[{distance:40},{distance:80}], 'shadow-3':[{distance:40}],
   'float-1':[{volume:160,mass:120}], 'float-2':[{volume:160,mass:80},{volume:160,mass:120}], 'float-3':[{volume:200,mass:140}],
@@ -82,7 +83,7 @@ function pageFixture(){
  const source=readFileSync(new URL('../pages/lab/index.vue',import.meta.url),'utf8')
  const script=source.match(/<script>([\s\S]*?)<\/script>/)[1].replace(/^import .*$/gm,'').replace('export default','const page =')
  const saved=new Map();let fail=false
- const page=runInNewContext(`${script}\npage`,{...lab,...tasks,drawExperiment(){},clearTimeout,clearInterval,uni:{getStorageSync:key=>saved.get(key),setStorageSync:(key,value)=>{if(fail)throw Error('full');saved.set(key,JSON.stringify(value))},pageScrollTo(){}}})
+ const page=runInNewContext(`${script}\npage`,{...lab,...tasks,...inquiries,drawExperiment(){},clearTimeout,clearInterval,uni:{getStorageSync:key=>saved.get(key),setStorageSync:(key,value)=>{if(fail)throw Error('full');saved.set(key,JSON.stringify(value))},pageScrollTo(){}}})
  const state=page.data()
  for(const [name,method]of Object.entries(page.methods))state[name]=method.bind(state)
  for(const [name,get]of Object.entries(page.computed))Object.defineProperty(state,name,{get:get.bind(state)})

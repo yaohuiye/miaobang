@@ -17,6 +17,9 @@ import { safetyLearningStore } from '@/services/safety-learning.js'
 import { LAB_CHALLENGES_KEY, readLabChallenges, summarizeLabChallenges } from '@/lab/challenges.mjs'
 import { SKILL_CHALLENGES_KEY, readSkillChallenges, summarizeSkillChallenges } from '@/game/skill-challenges.mjs'
 import { GOMOKU_LEARNING_KEY,readGomokuLearning,summarizeGomokuLearning } from '@/game/gomoku-learning.mjs'
+import { GOMOKU_TACTICS_KEY } from '@/game/gomoku-tactics-progress.mjs'
+import { tacticalPuzzles } from '@/game/gomoku-tactics.mjs'
+import { LAB_INQUIRIES,LAB_INQUIRIES_KEY,readLabInquiries } from '@/lab/inquiries.mjs'
 import { summarizeSafetyLearning } from '@/game/safety-learning.mjs'
 export default {
  data(){return {metrics:{},detail:{},errors:[],earned:[],opened:{}}},computed:{progress(){return explorerProgress(this.metrics,this.earned)}},onShow(){this.load()},
@@ -25,8 +28,8 @@ export default {
  read('英语',()=>{const s=summarizeWordProgress(wordProgressStore.read());metrics.english=s;detail.english='辨认 '+s.recognized+' · 拼装 '+s.assembled+' · 独立拼写 '+s.written+' · 待复习 '+s.dueCount});
  read('口算',()=>{const s=oralLearningStore.summary();metrics.math={...s,steadyKinds:s.kinds.filter(k=>k.firstTotal>=5&&k.accuracy>=80).length};detail.math='已练 '+s.firstTotal+' 题 · 变式验证通过 '+s.mastered+' 项 · 待练 '+s.due+' 项'});
  read('安全',()=>{const s=summarizeSafetyLearning(safetyLearningStore.read());metrics.safety=s;detail.safety='独立完成过 '+s.steps+' 步 · 待复习 '+s.review.length+' 个故事'});
- read('五子棋',()=>{const s=summarizeGomokuLearning(readGomokuLearning(uni.getStorageSync(GOMOKU_LEARNING_KEY)));metrics.gomoku=s;detail.gomoku='已练 '+s.practiced+' / '+s.total+' 题 · 独立完成 '+s.independent+' 题'});
- read('实验',()=>{const s=summarizeLabChallenges(readLabChallenges(uni.getStorageSync(LAB_CHALLENGES_KEY)));metrics.lab=s;detail.lab='已独立完成 '+s.completed+' / '+s.total+' 项实验任务'});
+ read('五子棋',()=>{const s=summarizeGomokuLearning(readGomokuLearning(uni.getStorageSync(GOMOKU_LEARNING_KEY)));const t=readGomokuLearning(uni.getStorageSync(GOMOKU_TACTICS_KEY));const completed=tacticalPuzzles.filter(p=>t.practiced.includes(p.id)).length;metrics.gomoku=s;detail.gomoku='连续攻防 '+completed+' / '+tacticalPuzzles.length+' 段 · 单步巩固独立完成 '+s.independent+' / '+s.total+' 题'});
+ read('实验',()=>{const s=summarizeLabChallenges(readLabChallenges(uni.getStorageSync(LAB_CHALLENGES_KEY)));const reports=readLabInquiries(uni.getStorageSync(LAB_INQUIRIES_KEY));metrics.lab=s;detail.lab='完整探究 '+Object.keys(reports.completed).length+' / '+LAB_INQUIRIES.length+' 份 · 入门任务 '+s.completed+' / '+s.total+' 项'});
  read('游戏挑战',()=>{const s=summarizeSkillChallenges(readSkillChallenges(uni.getStorageSync(SKILL_CHALLENGES_KEY)));metrics.mines={completed:s.mines};metrics.jump={completed:s.jump};detail.mines='已通过 '+s.mines+' / 3 档难度';detail.jump='已通过 '+s.jump+' / 3 档难度'});
  if(!errors.length){try{const raw=uni.getStorageSync(EXPLORER_BADGES_KEY),old=readExplorerBadges(raw),next=awardExplorerBadges(old,metrics,Date.now());if(Object.keys(next.earned).length!==Object.keys(old.earned).length)uni.setStorageSync(EXPLORER_BADGES_KEY,next);this.earned=Object.keys(next.earned)}catch(e){errors.push('徽章尚未保存：'+e.message)}}
  this.metrics=metrics;this.detail=detail;this.errors=errors},nextGoal(domain){const b=domain.badges.find(b=>!b.earned);return b?'下一步：'+b.detail+'（'+Math.min(b.count,b.target)+'/'+b.target+'）':'三枚徽章都已获得，继续挑战喜欢的内容吧'},go(url){uni.navigateTo({url})}
