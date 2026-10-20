@@ -20,3 +20,7 @@ app/.hbuilderx/
 .audio-tools/
 *.onnx
 *.onnx.json
+
+# Personal portraits and their source prompts stay on this device.
+app/static/private-family/
+private/family-characters/

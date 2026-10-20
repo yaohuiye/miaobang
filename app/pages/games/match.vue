@@ -1,7 +1,7 @@
 <template>
   <view class="family-page match-page">
     <text class="eyebrow">小妙的益智游乐场 · 找规律</text><text class="title">消消乐</text>
-    <text class="intro">点两个上下左右相邻的水果交换位置，凑成三个一样就消掉。<br />连着消有加成分；没有能消的时候，水果盘会自己重新排一排。</text>
+    <text class="intro">点两枚上下左右相邻的棋子交换位置，凑成三个相同水果标记就消掉。<br />连着消有加成分；没有能消的时候，棋盘会自己重新排一排。</text>
     <view class="level-strip"><button v-for="(item,i) in levels" :key="i" :disabled="i+1>progress.unlocked" :class="{active:level===i+1}" @click="chooseLevel(i+1)">{{ i+1>progress.unlocked ? '锁' : i+1 }}</button></view>
     <text class="level-title">第 {{ level }} / 12 关 · {{ levels[level-1].name }} · {{ goalText }}</text>
     <text v-if="error" class="error">{{ error }}</text>
@@ -10,12 +10,22 @@
       <text class="muted">还剩 {{ movesLeft }} 步</text>
       <text v-if="best" class="muted">{{ best }}</text>
     </view>
+    <view v-if="levels[level-1].goals.length" class="collection-goals">
+      <view v-for="goal in levels[level-1].goals" :key="goal.kind" :class="['collection-goal', 'kind-'+goal.kind]">
+        <view class="goal-avatar"><family-portrait :pose="tilePoses[goal.kind]" :fallback-symbol="tiles[goal.kind]" /><text class="fruit-badge">{{ tiles[goal.kind] }}</text></view>
+        <text>{{ tileNames[goal.kind] }} {{ Math.min(goal.count,collected[goal.kind]||0) }} / {{ goal.count }}</text>
+      </view>
+    </view>
     <view class="card board-card">
       <view class="match-grid">
-        <button v-for="(cell, index) in flatCells" :key="index"
-          :class="['fruit', { chosen: isSelected(Math.floor(index / matchCols), index % matchCols) }]"
+        <button v-for="(kind, index) in flatCells" :key="index"
+          :class="['fruit', 'kind-'+kind, { chosen: isSelected(Math.floor(index / matchCols), index % matchCols) }]"
           :disabled="finished"
-          @click="tap(Math.floor(index / matchCols), index % matchCols)">{{ cell }}</button>
+          :aria-label="kind<0 ? '尚未开始' : tileNames[kind]"
+          @click="tap(Math.floor(index / matchCols), index % matchCols)">
+          <view v-if="kind>=0" class="fruit-portrait"><family-portrait :pose="tilePoses[kind]" :fallback-symbol="tiles[kind]" /></view>
+          <text v-if="kind>=0" class="fruit-badge">{{ tiles[kind] }}</text><text v-else class="empty-fruit">❔</text>
+        </button>
       </view>
       <text v-if="feedback" class="feedback">{{ feedback }}</text>
       <view class="actions">
@@ -39,10 +49,10 @@ import { bestText } from '@/game/arcade-progress.mjs'
 import { MATCH_LEVELS, MATCH_LEVEL_KEY, readMatchLevels, unlockMatchLevel, matchGoalReached, matchGoalText } from '@/game/match-levels.mjs'
 const TOTAL_MOVES = 18
 export default {
-  data() { return { levels:MATCH_LEVELS,progress:{version:1,unlocked:1},level:1,passed:false,collected:[0,0,0,0,0],grid: null, matchCols: MATCH_COLS, selected: null, score: 0, movesLeft: TOTAL_MOVES, finished: false, feedback: '', hint: '', best: '', error: '' } },
+  data() { return { tiles:TILES,tilePoses:['ready','thinking','discovery','celebrate','cheer'],tileNames:['苹果','橘子','葡萄','草莓','向日葵'],levels:MATCH_LEVELS,progress:{version:1,unlocked:1},level:1,passed:false,collected:[0,0,0,0,0],grid: null, matchCols: MATCH_COLS, selected: null, score: 0, movesLeft: TOTAL_MOVES, finished: false, feedback: '', hint: '', best: '', error: '' } },
   computed: {
     goalText(){return matchGoalText(this.levels[this.level-1],this.collected)},
-    flatCells() { return this.grid ? this.grid.flat().map(kind => TILES[kind]) : Array.from({ length: 64 }, () => '❔') }
+    flatCells() { return this.grid ? this.grid.flat() : Array.from({ length: 64 }, () => -1) }
   },
   onLoad() { this.readBest();try{this.progress=readMatchLevels(uni.getStorageSync(MATCH_LEVEL_KEY));this.level=this.progress.unlocked}catch(e){this.error=e.message} },
   methods: {
@@ -85,7 +95,7 @@ export default {
         this.selected = null
         if (!hasMoves(this.grid)) {
           this.grid = reshuffle(this.grid, Math.random)
-          this.feedback = '没有能消的排列了，水果盘重新排了排，继续！'
+          this.feedback = '没有能消的排列了，棋盘重新排了排，继续！'
         }
         if (matchGoalReached(this.levels[this.level-1],this.score,this.collected)||!this.movesLeft) this.finish()
       } catch (error) { this.feedback = error.message }
@@ -124,10 +134,17 @@ export default {
 .level-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:12px 0}.level-strip button{margin:0;padding:0;font-size:14px;background:#e8f0fa;color:#355f88}.level-strip .active{background:#2467b5;color:white}.level-title{display:block;font-size:15px;color:#286857;margin-bottom:12px}
 .match-page .intro { display:block; margin:8px 0 14px; color:#526b86; font-size:14px; line-height:1.8; }
 .board-head { margin-bottom:10px; font-size:14px; }
-.board-card { padding:12px; }
-.match-grid { display:grid; grid-template-columns:repeat(8, 1fr); gap:4px; }
-.fruit { margin:0; padding:0; height:38px; line-height:38px; font-size:20px; border-radius:9px; background:#f2f7fd; text-align:center; }
-.fruit.chosen { background:#ffe9b8; border:2px solid #e8b84f; }
+.match-page .board-card { padding:10px; }
+.match-grid { display:grid; grid-template-columns:repeat(8, minmax(0, 1fr)); gap:3px; }
+.match-grid .fruit { position:relative; margin:0; padding:0; min-width:0; min-height:0; height:clamp(38px,10vw,48px); line-height:1; font-size:20px; border:1px solid #dce7ee; border-radius:8px; background:#f2f7fd; box-sizing:border-box; overflow:hidden; }
+.fruit-portrait { position:absolute; inset:2px 1px 4px; pointer-events:none; }
+.fruit-badge { position:absolute; right:1px; bottom:1px; display:flex; align-items:center; justify-content:center; width:14px; height:14px; border-radius:50%; background:#fff; font-size:11px; line-height:1; pointer-events:none; }
+.fruit-portrait,.goal-avatar { overflow:hidden; }
+.fruit-portrait :deep(.portrait-private),.goal-avatar :deep(.portrait-private) { width:155%; height:155%; left:-27.5%; top:0; }
+.empty-fruit { display:flex; align-items:center; justify-content:center; height:100%; pointer-events:none; }
+.match-grid .kind-0,.collection-goal.kind-0 { background:#fbe5de; }.match-grid .kind-1,.collection-goal.kind-1 { background:#fff0cd; }.match-grid .kind-2,.collection-goal.kind-2 { background:#eee4f8; }.match-grid .kind-3,.collection-goal.kind-3 { background:#fbdfea; }.match-grid .kind-4,.collection-goal.kind-4 { background:#e3f0d4; }
+.match-grid .fruit.chosen { border-color:#b7801d; box-shadow:inset 0 0 0 2px #e8b84f; }
+.collection-goals { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }.collection-goal { display:flex; align-items:center; gap:6px; padding:4px 9px 4px 4px; border-radius:12px; color:#425776; font-size:12px; }.goal-avatar { position:relative; width:34px; height:34px; flex-shrink:0; font-size:22px; pointer-events:none; }
 .feedback, .hint { display:block; margin-top:12px; font-size:13px; line-height:1.8; padding:10px 12px; border-radius:12px; background:#fff4de; color:#846332; }
 .hint { background:#eaf3ff; color:#3f6a9e; }
 .actions { display:flex; gap:10px; margin-top:14px; }.actions button { flex:1; margin:0; }
